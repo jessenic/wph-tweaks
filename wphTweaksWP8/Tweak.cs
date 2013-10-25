@@ -158,6 +158,13 @@ namespace wphTweaks
             t.key = @"HKLM\System\Maps\StorageUseExternalStorage";
             tweaks.Add(t);
 
+            t = new Tweak();
+            t.title = "Disable FM Radio";
+            t.onValue = 1;
+            t.offValue = 0;
+            t.key = @"HKLM\Software\Microsoft\FMRadio\OEM\NotPresent";
+            tweaks.Add(t);
+
             //t = new Tweak();
             //t.title = "Soft shutter button";
             //t.key = @"HKLM\SOFTWARE\Microsoft\Camera\Settings\SoftShutterButton";
