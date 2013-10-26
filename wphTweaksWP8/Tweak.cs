@@ -267,6 +267,15 @@ namespace wphTweaks
             tweaks.Add(t);
 
             t = new Tweak();
+            t.title = "Start key wakes up the screen";
+            t.offValue = 0;
+            t.onValue = 1;
+            t.keyType = Tweak.tweakType.dword;
+            t.key = @"HKLM\SYSTEM\Keyboard\EnableStartOnIdle";
+            t.rebootNeeded = true;
+            tweaks.Add(t);
+
+            t = new Tweak();
             t.title = "Full USB file system access";
             t.strOffValue = @"C:\Data\Users\PUBLIC";
             t.strOnValue = @"C:\";
