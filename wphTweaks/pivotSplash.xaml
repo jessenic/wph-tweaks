@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage 
-    x:Class="wphSplashChanger.pivotSplash"
+    x:Class="wphTweaks.pivotSplash"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -33,14 +33,13 @@
                     <phone:WebBrowser Name="bro" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Height="624" Width="446" Navigating="WebBrowser_Navigating_1"/>
                 </Grid>
             </controls:PivotItem>
-<!--
             <controls:PivotItem Header="custom" Margin="12,-26,12,0">
                 <Grid>
-                    <Button Content="Choose image" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Width="436" Click="Button_Click_2"/>
+                    <Button Content="Choose image" HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top" Width="436" Click="Button_Click_2"/>
+                    <Button Content="View Current" Name="ViewCurrentImageButton" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" Width="436" Click="ViewCurrentImageButton_Click"/>
 
                 </Grid>
             </controls:PivotItem>
-            -->
 
             <controls:PivotItem Header="restore" Margin="12,-26,12,0">
                 <Grid>
@@ -49,6 +48,7 @@
                 </Grid>
             </controls:PivotItem>
         </controls:Pivot>
+        <Image Name="SplashImage" Visibility="Collapsed" Tap="SplashImage_Tap"/>
     </Grid>
     
 </phone:PhoneApplicationPage>

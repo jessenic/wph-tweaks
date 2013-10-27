@@ -410,7 +410,11 @@ namespace wphTweaks
 
         private void btnRestart_Click(object sender, RoutedEventArgs e)
         {
-            //CSharp___DllImport.Phone.OS.Shutdown(CSharp___DllImport.EWX.EWX_REBOOT);
+            uint stuff = 0;
+            uint thingy = CRPCComponent.System_Reboot(out stuff);
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(stuff + " - " + thingy);
+#endif
         }
 
         private void btnBrandedUpdates_Click(object sender, RoutedEventArgs e)
@@ -454,7 +458,9 @@ namespace wphTweaks
             {
                 uint stuff = 0;
                 uint thingy = CRPCComponent.System_Reboot(out stuff);
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine(stuff + " - " + thingy);
+#endif
             }
         }
 
