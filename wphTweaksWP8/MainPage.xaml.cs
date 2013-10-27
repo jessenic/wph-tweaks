@@ -206,11 +206,13 @@ namespace wphTweaks
 
         void btn_Click(object sender, RoutedEventArgs e)
         {
+            string googlePath = @"Software\Microsoft\Internet Explorer\SearchProviders\Google";
+            string googleUrl = "http://www.google.com/search?q={searchTerms}";
             //HKCU\Software\Microsoft\Internet Explorer\SearchProviders\Google\URL
             //http://www.google.com/search?hl=en&q={searchTerms}&meta=
             try
             {
-                Registry.CreateKey(RegistryHive.HKCU, @"Software\Microsoft\Internet Explorer\SearchProviders\Google");
+                Registry.CreateKey(RegistryHive.HKCU, googlePath);
                 if (Registry.LastError != 0)
                 {
                     MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
@@ -222,20 +224,56 @@ namespace wphTweaks
             }
             try
             {
-                Registry.WriteString(RegistryHive.HKCU, @"Software\Microsoft\Internet Explorer\SearchProviders\Google", "URL", "http://www.google.com/search?q={searchTerms}");
+                Registry.WriteString(RegistryHive.HKCU, googlePath, "URL", googleUrl);
                 if (Registry.LastError != 0)
                 {
                     MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
 
                 }
+                var lp = new ListPicker();
+                lp.Items.Add("Bing (default)");
+                lp.Items.Add("Google.com");
+                lp.Items.Add("Google app");
+                CustomMessageBox cmb = new CustomMessageBox()
+                {
+                    Title = "Question",
+                    Content = lp,
+                    IsLeftButtonEnabled = false,
+                    IsRightButtonEnabled = true,
+                    Caption = "Choose search key action",
+                    Message = "Choose what the search key does. This setting might not work in regions where Bing works!",
+                    RightButtonContent = "done"
+                };
+                cmb.Dismissed += new EventHandler<DismissedEventArgs>((dsender, de) =>
+                {
+                    if (lp.SelectedIndex == 1)
+                    {
+                        Registry.WriteString(RegistryHive.HKCU, googlePath, "AppUri", "app://5B04B775-356B-4AA0-AAF8-6491FFEA5660/_default?StartURL=" + googleUrl);
+                    }
+                    else if (lp.SelectedIndex == 2)
+                    {
+                        Registry.WriteString(RegistryHive.HKCU, googlePath, "AppUri", "app://220bfbf2-ee02-496c-a656-651a6c0c6518/_default");
+                    }
+                    else
+                    {
+                        Registry.WriteString(RegistryHive.HKCU, googlePath, "AppUri", "");
+                        Registry.RemoveValue(RegistryHive.HKCU, googlePath, "AppUri");
+                    }
+                    if (Registry.LastError != 0)
+                    {
+                        MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
+
+                    }
+                });
+                cmb.Show();
             }
             catch
             {
             }
             //TODO: Find a fix
-            uint id = Processes.NativeProcess.CreateProc(@"C:\Programs\InternetExplorer\BrowserSettingsHost.exe");
-            MessageBox.Show(id.ToString());
-            MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
+            //uint id = Processes.NativeProcess.CreateProc(@"C:\Programs\InternetExplorer\BrowserSettingsHost.exe");
+            //MessageBox.Show(id.ToString());
+            //MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
             //CSharp___DllImport.Phone.AppLauncher.LaunchBuiltInApplication(CSharp___DllImport.Phone.AppLauncher.Apps.Internet7Settings, "_default");
         }
 

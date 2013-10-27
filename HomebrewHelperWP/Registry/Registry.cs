@@ -123,7 +123,7 @@ namespace HomebrewHelperWP
                     LastError = 0;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LastError = (uint)ex.HResult;
             }
@@ -141,6 +141,15 @@ namespace HomebrewHelperWP
                 LastError = 0;
             }
             return ret;
+        }
+
+        public static void RemoveValue(RegistryHive hive, string path, string value)
+        {
+            LastError = 0;
+            if (!NativeRegistry.DeleteValue((global::Registry.RegistryHive)hive, path, value))
+            {
+                LastError = NativeRegistry.GetError();
+            }
         }
 
         internal static uint SammyWriteString(RegistryHive hive, string path, string value, string data, out uint retval)
