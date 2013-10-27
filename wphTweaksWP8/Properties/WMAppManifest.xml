@@ -96,6 +96,8 @@
       <Capability Name="ID_CAP_WALLPAPER_ADMIN" />
       <!--<Capability Name="ID_CAP_PRIV_ACCOUNTPROVSVC" />-->
       <Capability Name="ID_CAP_PLAYREADY_ADMIN" />
+      <Capability Name="ID_CAP_EVERYONE" />
+      <Capability Name="ID_CAP_BUILTIN_DEFAULT" />
     </Capabilities>
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
