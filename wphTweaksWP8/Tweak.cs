@@ -155,7 +155,7 @@ namespace wphTweaks
             t.title = "Save maps to SD card";
             t.onValue = 1;
             t.offValue = 0;
-            t.key = @"HKLM\System\Maps\StorageUseExternalStorage";
+            t.key = @"HKLM\System\Maps\Storage\UseExternalStorage";
             tweaks.Add(t);
 
             t = new Tweak();
