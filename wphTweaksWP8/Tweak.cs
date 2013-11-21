@@ -282,14 +282,14 @@ namespace wphTweaks
             t.rebootNeeded = true;
             tweaks.Add(t);
 
-            t = new Tweak();
-            t.title = "Full USB file system access";
-            t.strOffValue = @"C:\Data\Users\PUBLIC";
-            t.strOnValue = @"C:\";
-            t.keyType = Tweak.tweakType.str;
-            t.key = @"HKLM\SOFTWARE\Microsoft\MTP\DataStore";
-            t.rebootNeeded = true;
-            tweaks.Add(t);
+            //t = new Tweak();
+            //t.title = "Full USB file system access";
+            //t.strOffValue = @"C:\Data\Users\PUBLIC";
+            //t.strOnValue = @"C:\";
+            //t.keyType = Tweak.tweakType.str;
+            //t.key = @"HKLM\SOFTWARE\Microsoft\MTP\DataStore";
+            //t.rebootNeeded = true;
+            //tweaks.Add(t);
 
 
             //t = new Tweak();
