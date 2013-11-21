@@ -29,9 +29,11 @@ namespace wphTweaks
         public pivotSplash()
         {
             InitializeComponent();
+#if WP8
             Decoders.AddDecoder<BmpDecoder>();
             Decoders.AddDecoder<PngDecoder>();
             Decoders.AddDecoder<JpegDecoder>();
+#endif
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -180,6 +182,7 @@ namespace wphTweaks
 
         private void saveImage(Stream image, bool isJpeg = false)
         {
+#if WP8
             using (var store = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication())
             {
                 using (var stream = store.OpenFile("mologo.bmp", System.IO.FileMode.Create))
@@ -220,6 +223,9 @@ namespace wphTweaks
                     encoder.Encode(ei, stream);
                 }
             }
+#else
+            MessageBox.Show("Feature not implmented yet!");
+#endif
         }
 
         private void ViewCurrentImageButton_Click(object sender, RoutedEventArgs e)
@@ -242,11 +248,15 @@ namespace wphTweaks
                     using (var stream = store.OpenFile("mologo.bmp", System.IO.FileMode.Open))
                     {
 #endif
+#if WP8
                     var iso = new ExtendedImage();
                     var dec = new ImageTools.IO.Bmp.BmpDecoder();
                     dec.Decode(iso, stream);
                     SplashImage.Source = iso.ToBitmap();
                     SplashImage.Visibility = Visibility.Visible;
+#else
+                        MessageBox.Show("Feature not implemented yet!");
+#endif
                 }
 #if !WP8
             }
