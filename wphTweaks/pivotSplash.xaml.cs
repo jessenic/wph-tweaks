@@ -57,23 +57,6 @@ namespace wphTweaks
 
         DateTime downloadStartTime;
 
-        private void WebBrowser_Navigating_1(object sender, NavigatingEventArgs e)
-        {
-            var matchstr = "#downloadbg=";
-            if (e.Uri.ToString().ToLower().Contains(matchstr))
-            {
-                var id = e.Uri.ToString().Substring(e.Uri.ToString().IndexOf(matchstr) + matchstr.Length);
-                e.Cancel = true;
-                downloadStartTime = DateTime.Now;
-                WebClient c = new WebClient();
-                c.OpenReadAsync(new Uri("http://windowsphonehacker.com/splashes/bmp/" + id, UriKind.Absolute), id);
-                c.OpenReadCompleted += c_OpenReadCompleted;
-
-                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("splashchanger", "click_" + id, "Download image " + id, 0);
-                MessageBox.Show("Downloading. This may take a bit.");
-
-            }
-        }
 
         void c_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
         {
@@ -126,7 +109,51 @@ namespace wphTweaks
                 Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride_Original", defsplash);
             }
 #endif
-            bro.Navigate(new Uri("http://windowsphonehacker.com/splashes/get.php?resolution=" + Resolution, UriKind.Absolute));
+            WebClient wc = new WebClient();
+            wc.DownloadStringCompleted += wc_DownloadStringCompleted;
+            wc.DownloadStringAsync(new Uri("http://jessenic.github.io/wph-tweaks/splashes.txt"));
+        }
+
+        void wc_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            try
+            {
+                if (e.Error != null)
+                {
+                    throw e.Error;
+                }
+                foreach (string line in e.Result.Split('\n'))
+                {
+                    //Format: id|resolution|thumb|image|
+                    string[] vars = line.Split('|');
+                    ImageList.Items.Add(new TextBlock() { Text = vars[0] + " " + vars[1] });
+                    var img = new Image();
+                    img.Tap += img_Tap;
+                    var bmi = new BitmapImage(new Uri(vars[2]));
+                    img.Tag = vars[3];
+                    img.Name = "image_" + vars[0];
+                    img.Source = bmi;
+
+                    ImageList.Items.Add(img);
+                }
+            }
+            catch (Exception ex)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendException("Getting online gallery Failed: " + ex.Message, false);
+                MessageBox.Show("Getting online gallery failed!\n" + ex.Message);
+            }
+        }
+
+        void img_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            Image img = (Image)sender;
+            downloadStartTime = DateTime.Now;
+            WebClient c = new WebClient();
+            c.OpenReadAsync(new Uri((string)img.Tag, UriKind.Absolute), img.Name);
+            c.OpenReadCompleted += c_OpenReadCompleted;
+
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("splashchanger", "click_" + img.Name, "Download image " + img.Name, 0);
+            MessageBox.Show("Downloading. This may take a bit.");
         }
         private Size _resolutionSize;
         public Size ResolutionSize

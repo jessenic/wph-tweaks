@@ -26,12 +26,10 @@
                     <TextBlock Margin="0,15,5,5" Text="{Binding}" FontSize="40"/>
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
-            
+
             <!--Pivot item one-->
-            <controls:PivotItem Header="gallery" Margin="12,-26,12,0">
-                <Grid>
-                    <phone:WebBrowser Name="bro" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Height="624" Width="446" Navigating="WebBrowser_Navigating_1"/>
-                </Grid>
+            <controls:PivotItem Header="gallery" Margin="12,0">
+                <ListBox Name="ImageList"/>
             </controls:PivotItem>
             <controls:PivotItem Header="custom" Margin="12,-26,12,0">
                 <Grid>
@@ -50,5 +48,5 @@
         </controls:Pivot>
         <Image Name="SplashImage" Visibility="Collapsed" Tap="SplashImage_Tap"/>
     </Grid>
-    
+
 </phone:PhoneApplicationPage>
