@@ -1,0 +1,6 @@
+7Plain|480x840|http://windowsphonehacker.com/splashes/thumbs/7Plain.png|http://windowsphonehacker.com/splashes/bmp/7Plain.bmp|
+windows8|480x840|http://windowsphonehacker.com/splashes/thumbs/windows8.jpg|http://windowsphonehacker.com/splashes/bmp/windows8.bmp|
+wph2|480x840|http://windowsphonehacker.com/splashes/thumbs/wph2.jpg|http://windowsphonehacker.com/splashes/bmp/wph2.bmp|
+WPHBlur|480x840|http://windowsphonehacker.com/splashes/thumbs/WPHBlur.png|http://windowsphonehacker.com/splashes/bmp/WPHBlur.bmp|
+wphboot|480x840|http://windowsphonehacker.com/splashes/thumbs/wphboot.jpg|http://windowsphonehacker.com/splashes/bmp/wphboot.bmp|
+android|480x840|http://windowsphonehacker.com/splashes/thumbs/android.jpg|http://windowsphonehacker.com/splashes/bmp/android.bmp|
