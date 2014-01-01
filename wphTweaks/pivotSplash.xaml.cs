@@ -12,14 +12,12 @@ using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using System.IO;
 using System.IO.IsolatedStorage;
-#if WP8
-using HomebrewHelperWP;
-using System.Windows.Media.Imaging;
 using ImageTools.IO.Bmp;
 using ImageTools.IO;
 using ImageTools;
-using ImageTools.IO.Png;
-using ImageTools.IO.Jpeg;
+#if WP8
+using HomebrewHelperWP;
+using System.Windows.Media.Imaging;
 #endif
 
 namespace wphTweaks
@@ -29,27 +27,24 @@ namespace wphTweaks
         public pivotSplash()
         {
             InitializeComponent();
-#if WP8
             Decoders.AddDecoder<BmpDecoder>();
-            Decoders.AddDecoder<PngDecoder>();
-            Decoders.AddDecoder<JpegDecoder>();
-#endif
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("splashchanger", "click", "Restore Splash", 0);
             try
             {
 #if WP8
-                string defsplash = "";
-                if (IsolatedStorageSettings.ApplicationSettings.TryGetValue<string>("defaultsplash", out defsplash))
-                {
-                    Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride", defsplash);
-                }
-                else
+                string defsplash = Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride_Original");
+                if (defsplash == null || defsplash.Length < 2 || defsplash == "none")
                 {
                     Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride", "");
                     Registry.RemoveValue(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride");
+                }
+                else
+                {
+                    Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride", defsplash);
                 }
 #else
                 WP7RootToolsSDK.FileSystem.DeleteFile(@"\windows\mologo.bmp");
@@ -60,20 +55,22 @@ namespace wphTweaks
             }
         }
 
+        DateTime downloadStartTime;
+
         private void WebBrowser_Navigating_1(object sender, NavigatingEventArgs e)
         {
-            if (e.Uri.ToString().Contains("#downloadbg="))
+            var matchstr = "#downloadbg=";
+            if (e.Uri.ToString().ToLower().Contains(matchstr))
             {
-                var id = e.Uri.ToString().Substring(e.Uri.ToString().IndexOf("=") + 1);
+                var id = e.Uri.ToString().Substring(e.Uri.ToString().IndexOf(matchstr) + matchstr.Length);
                 e.Cancel = true;
+                downloadStartTime = DateTime.Now;
+                WebClient c = new WebClient();
+                c.OpenReadAsync(new Uri("http://windowsphonehacker.com/splashes/bmp/" + id, UriKind.Absolute), id);
+                c.OpenReadCompleted += c_OpenReadCompleted;
 
-                using (var store = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication())
-                {
-                    WebClient c = new WebClient();
-                    c.OpenReadAsync(new Uri("http://windowsphonehacker.com/splashes/bmp/" + id, UriKind.Absolute), id);
-                    c.OpenReadCompleted += c_OpenReadCompleted;
-                    MessageBox.Show("Downloading. This may take a bit.");
-                }
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("splashchanger", "click_" + id, "Download image " + id, 0);
+                MessageBox.Show("Downloading. This may take a bit.");
 
             }
         }
@@ -85,15 +82,23 @@ namespace wphTweaks
             {
                 if (!e.Cancelled)
                 {
-                    saveImage(e.Result, id.ToLower().EndsWith(".jpg"));
+                    if (e.Error != null)
+                    {
+                        throw e.Error;
+                    }
+                    GoogleAnalytics.EasyTracker.GetTracker().SendTiming(DateTime.Now.Subtract(downloadStartTime), "splashchanger", "download_" + id, "Splash " + id + " Download Time");
+
+                    saveImage(e.Result);
                     setBackground();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed!\n" + ex.Message);
+                GoogleAnalytics.EasyTracker.GetTracker().SendException("Splash Download Failed: " + ex.Message, false);
+                MessageBox.Show("Download failed!\n" + ex.Message);
             }
         }
+
 
         void setBackground()
         {
@@ -110,25 +115,25 @@ namespace wphTweaks
         private void PhoneApplicationPage_Loaded_1(object sender, RoutedEventArgs e)
         {
 #if WP8
-            string defsplash = "";
-            if (!IsolatedStorageSettings.ApplicationSettings.TryGetValue<string>("defaultsplash", out defsplash))
+            string defsplash = Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride_Original");
+            if (defsplash == null || defsplash.Length < 2)
             {
                 defsplash = Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride");
-                if (defsplash.Length > 4)
+                if (defsplash.Length < 2)
                 {
-                    IsolatedStorageSettings.ApplicationSettings["defaultsplash"] = defsplash;
-                    IsolatedStorageSettings.ApplicationSettings.Save();
+                    defsplash = "none";
                 }
+                Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride_Original", defsplash);
             }
 #endif
             bro.Navigate(new Uri("http://windowsphonehacker.com/splashes/get.php?resolution=" + Resolution, UriKind.Absolute));
         }
         private Size _resolutionSize;
-        Size ResolutionSize
+        public Size ResolutionSize
         {
             get
             {
-                if (_resolutionSize != null)
+                if (_resolutionSize.Height > 0 && _resolutionSize.Width > 0)
                 {
                     return _resolutionSize;
                 }
@@ -136,7 +141,11 @@ namespace wphTweaks
                 object size;
                 if (Microsoft.Phone.Info.DeviceExtendedProperties.TryGetValue("PhysicalScreenResolution", out size))
                 {
-                    return _resolutionSize = (Size)size;
+                    _resolutionSize = (Size)size;
+                    if (_resolutionSize.Height > 0 && _resolutionSize.Width > 0)
+                    {
+                        return _resolutionSize;
+                    }
                 }
                 switch (App.Current.Host.Content.ScaleFactor)
                 {
@@ -153,7 +162,7 @@ namespace wphTweaks
             }
         }
 
-        string Resolution
+        public string Resolution
         {
             get
             {
@@ -173,34 +182,38 @@ namespace wphTweaks
 
         void t_Completed(object sender, Microsoft.Phone.Tasks.PhotoResult e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("splashchanger", "photolib", "Splash from photolib: " + e.TaskResult.ToString(), (int)e.TaskResult);
             if (e.TaskResult == Microsoft.Phone.Tasks.TaskResult.OK)
             {
-                saveImage(e.ChosenPhoto, true);
-                setBackground();
+                try
+                {
+                    saveImage(e.ChosenPhoto);
+                    setBackground();
+                }
+                catch (Exception ex)
+                {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendException("Splash change Failed: " + ex.Message, false);
+                    MessageBox.Show("Splash change failed!\n" + ex.Message);
+                }
             }
         }
 
-        private void saveImage(Stream image, bool isJpeg = false)
+        private void saveImage(Stream image)
         {
-#if WP8
             using (var store = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication())
             {
                 using (var stream = store.OpenFile("mologo.bmp", System.IO.FileMode.Create))
                 {
-                    ExtendedImage ei = new ExtendedImage();
+                    var img = new Image();
+                    img.Width = ResolutionSize.Width;
+                    img.Height = ResolutionSize.Height;
+                    var bi = new BitmapImage();
+                    bi.SetSource(image);
+
+                    img.Source = bi;
+                    var img1 = img.ToImage();
                     IImageEncoder encoder = new BmpEncoder();
-                    if (isJpeg)
-                    {
-                        MessageBox.Show("We don't support JPG files yet!");
-                        throw new UnsupportedImageFormatException();
-                        var decoder = new JpegDecoder();
-                        decoder.Decode(ei, stream);
-                    }
-                    else
-                    {
-                        var decoder = new BmpDecoder();
-                        decoder.Decode(ei, stream);
-                    }
+                    ExtendedImage ei = new ExtendedImage(img1);
 
                     if (ei.PixelHeight != (int)ResolutionSize.Height || ei.PixelWidth != (int)ResolutionSize.Width)
                     {
@@ -223,13 +236,11 @@ namespace wphTweaks
                     encoder.Encode(ei, stream);
                 }
             }
-#else
-            MessageBox.Show("Feature not implmented yet!");
-#endif
         }
 
         private void ViewCurrentImageButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("splashchanger", "click", "View Current Image", 0);
             try
             {
 #if WP8
@@ -264,6 +275,7 @@ namespace wphTweaks
             }
             catch (Exception ex)
             {
+                GoogleAnalytics.EasyTracker.GetTracker().SendException("View Current Failed: " + ex.Message, false);
                 MessageBox.Show("Failed: " + ex.Message);
             }
         }

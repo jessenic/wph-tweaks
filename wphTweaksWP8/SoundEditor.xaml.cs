@@ -18,8 +18,9 @@ namespace wphTweaks
         {
             InitializeComponent();
             string[] sounds = Registry.GetSubKeyNames(RegistryHive.HKLM, @"SOFTWARE\Microsoft\EventSounds\Sounds");
-            if (sounds == null)
+            if (sounds == null || sounds.Length == 0)
             {
+                GoogleAnalytics.EasyTracker.GetTracker().SendException("SoundEditor Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError, false);
                 MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
             }
             else
@@ -66,6 +67,7 @@ namespace wphTweaks
 
         void custMsgBox_Dismissed(object sender, DismissedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("sounds", "changed", (string)((CustomMessageBox)sender).Tag, 0);
             if (e.Result == CustomMessageBoxResult.RightButton)
             {
                 try

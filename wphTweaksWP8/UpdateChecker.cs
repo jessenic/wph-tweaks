@@ -11,8 +11,10 @@ namespace wphTweaks
 {
     class UpdateChecker
     {
+        private static DateTime startTime;
         public static void CheckUpdatesAsync()
         {
+            startTime = DateTime.Now;
             WebClient wc = new WebClient();
             wc.DownloadStringAsync(new Uri("http://ci.dy.fi/job/WPH-Tweaks/api/xml"));
             wc.DownloadStringCompleted += wc_DownloadStringCompleted;
@@ -41,14 +43,18 @@ namespace wphTweaks
 
                 int lastbuildnum = 1;
                 Int32.TryParse(lastbuild.BuildNumber, out lastbuildnum);
+
+                GoogleAnalytics.EasyTracker.GetTracker().SendTiming(DateTime.Now.Subtract(startTime), "update", "checktime", "Update Check Time");
                 if (lastbuildnum > curbuild)
                 {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("update", "notified", "Current build: " + curbuild + ", Latest build: " + lastbuildnum, curbuild);
                     MessageBox.Show("There is a new build available to download!\nCurrent build: " + curbuild + "\nLatest build: " + lastbuildnum + "\nDownload URL:\n" + lastbuild.BuildUrl, "Update available!", MessageBoxButton.OK);
                 }
 
             }
             catch (Exception ex)
             {
+                GoogleAnalytics.EasyTracker.GetTracker().SendException("Update check failed: " + ex.Message, false);
                 MessageBox.Show("Update check failed! " + ex.Message);
             }
         }

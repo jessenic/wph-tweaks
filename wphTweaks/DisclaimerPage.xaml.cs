@@ -15,6 +15,8 @@ namespace wphTweaks
 {
     public partial class DisclaimerPage : PhoneApplicationPage
     {
+        DateTime navigateTime;
+
         public DisclaimerPage()
         {
             InitializeComponent();
@@ -36,6 +38,7 @@ namespace wphTweaks
             }
             if (e.NewValue > 7)
             {
+                GoogleAnalytics.EasyTracker.GetTracker().SendTiming(DateTime.Now.Subtract(navigateTime), "Disclaimer", "ReadTime", "Disclaimer Read Time");
                 if (NavigationService.CanGoBack)
                 {
                     NavigationService.GoBack();
@@ -50,6 +53,7 @@ namespace wphTweaks
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             NavigationService.RemoveBackEntry();
+            navigateTime = DateTime.Now;
         }
     }
 }

@@ -45,6 +45,7 @@ namespace wphTweaks
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("datastrings", "saved", null, 0);
             if (allempty)
             {
                 Registry.CreateKey(RegistryHive.HKLM, @"Software\Microsoft\Shell\OEM\SystemTray\DataConnectionStrings");

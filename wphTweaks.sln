@@ -16,6 +16,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2085F3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomebrewHelperWP", "HomebrewHelperWP\HomebrewHelperWP.csproj", "{964DE8B5-EA15-4865-9478-3C566A624AAF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JenkinsTargets", "JenkinsTargets", "{D894F24D-FCE9-4DB3-9085-A47BD97ABB59}"
+	ProjectSection(SolutionItems) = preProject
+		JenkinsTargets\UpdateVersion.targets = JenkinsTargets\UpdateVersion.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM

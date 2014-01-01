@@ -227,4 +227,5 @@
   -->
   <ProjectExtensions />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="$(SolutionDir)\JenkinsTargets\UpdateVersion.targets" Condition="Exists('$(SolutionDir)\JenkinsTargets\UpdateVersion.targets')" />
 </Project>

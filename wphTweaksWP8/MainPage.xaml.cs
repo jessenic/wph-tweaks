@@ -235,9 +235,10 @@ namespace wphTweaks
                 };
                 cmb.Dismissed += new EventHandler<DismissedEventArgs>((dsender, de) =>
                 {
+                    GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tools", "clicked", "Add Google", lp.SelectedIndex);
                     if (lp.SelectedIndex == 1)
                     {
-                        Registry.WriteString(RegistryHive.HKCU, googlePath, "AppUri", "app://5B04B775-356B-4AA0-AAF8-6491FFEA5660/_default?StartURL=" + googleUrl);
+                        Registry.WriteString(RegistryHive.HKCU, googlePath, "AppUri", googleUrl);
                     }
                     else if (lp.SelectedIndex == 2)
                     {
@@ -296,6 +297,7 @@ namespace wphTweaks
             {
                 ListPicker ctrl = (ListPicker)sender;
                 Tweak tweak = (Tweak)ctrl.Tag;
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tweaks", "selected", tweak.title, ctrl.SelectedIndex);
                 if (tweak.keyType == Tweak.tweakType.str)
                 {
                     string val = ((SelectorTweak)ctrl.SelectedItem).Value;
@@ -335,6 +337,7 @@ namespace wphTweaks
             {
                 ToggleSwitch ctrl = (ToggleSwitch)sender;
                 Tweak tweak = (Tweak)ctrl.Tag;
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tweaks", "checked", tweak.title, ctrl.IsChecked.Value ? 1 : 0);
 
                 if (tweak.keyType == Tweak.tweakType.dword)
                 {
@@ -382,7 +385,11 @@ namespace wphTweaks
 
         private void btnRestart_Click(object sender, RoutedEventArgs e)
         {
-            Reboot();
+            if (MessageBox.Show("Are you sure you want to restart the phone?", "Confirmation", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tools", "click", "Reboot", 0);
+                Reboot();
+            }
         }
 
         private void btnBrandedUpdates_Click(object sender, RoutedEventArgs e)

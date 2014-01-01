@@ -56,8 +56,15 @@ namespace wphTweaks
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
+            RootFrame.Navigated += RootFrame_Navigated;
 
         }
+
+        void RootFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            GoogleAnalytics.EasyTracker.GetTracker().SendView(e.Uri.ToString());
+        }
+
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated

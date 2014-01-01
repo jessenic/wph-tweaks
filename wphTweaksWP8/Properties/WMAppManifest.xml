@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="" />
-  <App xmlns="" ProductID="{a85aaecb-e288-4b19-a8e0-fca5d0f2a444}" Title="WPH Tweaks" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="wphTweaks author" Description="Sample description" Publisher="wphTweaks" PublisherID="{76983943-d39f-4ad1-bdf9-e4eebebbcf05}">
+  <App xmlns="" ProductID="{a85aaecb-e288-4b19-a8e0-fca5d0f2a444}" Title="WPH Tweaks" RuntimeType="Silverlight" Version="1.8.0.0" Genre="apps.normal" Author="wphTweaks author" Description="Sample description" Publisher="wphTweaks" PublisherID="{76983943-d39f-4ad1-bdf9-e4eebebbcf05}">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_APPOINTMENTS" />

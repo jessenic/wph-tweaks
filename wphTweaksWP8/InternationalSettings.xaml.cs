@@ -64,6 +64,7 @@ namespace wphTweaks
 
         void SaveChanges()
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("internationalsettings", "saved", null, 0);
             if ((string)NativeDigitsBox.Tag != NativeDigitsBox.Text)
             {
                 SetStr("sNativeDigits", NativeDigitsBox.Text);
