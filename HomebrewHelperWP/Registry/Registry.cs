@@ -53,9 +53,9 @@ namespace HomebrewHelperWP
                 if (!NativeRegistry.ReadDWORD((global::Registry.RegistryHive)hive, path, value, out ret))
                 {
                     uint error = NativeRegistry.GetError();
-                    if (UseSammy)
+                    if (SammyHelper.UseSammy)
                     {
-                        ret = SammyReadDWORD(hive, path, value, out error);
+                        ret = SammyHelper.SammyReadDWORD(hive, path, value, out error);
                     }
                     LastError = error;
                     //if (error != 0)
@@ -81,10 +81,10 @@ namespace HomebrewHelperWP
                 if (!NativeRegistry.WriteString((global::Registry.RegistryHive)hive, path, value, data))
                 {
                     LastError = NativeRegistry.GetError();
-                    if (UseSammy)
+                    if (SammyHelper.UseSammy)
                     {
                         uint retval;
-                        LastError = SammyWriteString(hive, path, value, data, out retval);
+                        LastError = SammyHelper.SammyWriteString(hive, path, value, data, out retval);
                     }
                     //if (error != 0)
                     //{
@@ -108,10 +108,10 @@ namespace HomebrewHelperWP
                 if (!NativeRegistry.WriteDWORD((global::Registry.RegistryHive)hive, path, value, data))
                 {
                     LastError = NativeRegistry.GetError();
-                    if (UseSammy)
+                    if (SammyHelper.UseSammy)
                     {
                         uint retval;
-                        LastError = SammyWriteDWORD(hive, path, value, data, out retval);
+                        LastError = SammyHelper.SammyWriteDWORD(hive, path, value, data, out retval);
                     }
                     //if (error != 0)
                     //{
@@ -152,47 +152,6 @@ namespace HomebrewHelperWP
             }
         }
 
-        internal static uint SammyWriteString(RegistryHive hive, string path, string value, string data, out uint retval)
-        {
-            InitSammy();
-            return CRPCComponent.Registry_SetString((uint)hive, path, value, data, out retval);
-        }
-
-        internal static uint SammyWriteDWORD(RegistryHive hive, string path, string value, uint data, out uint retval)
-        {
-            InitSammy();
-            return CRPCComponent.Registry_SetDWORD((uint)hive, path, value, data, out retval);
-        }
-
-        internal static string SammyReadString(RegistryHive hive, string path, string value, out uint error)
-        {
-            InitSammy();
-            return CRPCComponent.Registry_GetString((uint)hive, path, value, out error);
-        }
-
-        internal static uint SammyReadDWORD(RegistryHive hive, string path, string value, out uint error)
-        {
-            InitSammy();
-            return CRPCComponent.Registry_GetDWORD((uint)hive, path, value, out error);
-        }
-
-        internal static bool SammyInited = false;
-        internal static bool UseSammy = true;
-        internal static void InitSammy()
-        {
-            if (!SammyInited)
-            {
-                try
-                {
-                    CRPCComponent.Initialize();
-                    SammyInited = true;
-                }
-                catch
-                {
-                    UseSammy = false;
-                }
-            }
-        }
 
         public static void CreateKey(RegistryHive hive, string path)
         {

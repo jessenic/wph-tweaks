@@ -10,7 +10,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
-using RPCComponent;
 using HomebrewHelperWP;
 
 namespace wphTweaks
@@ -23,140 +22,136 @@ namespace wphTweaks
         public MainPage()
         {
             InitializeComponent();
-            CRPCComponent.Initialize();
-            // Check for root
-            if (true)
+            // Add the quick toggles defined in Tweaks
+            foreach (TweakCategory cat in Tweaks.Tweaks.Categories)
             {
-                // Add the quick toggles defined in Tweaks
-                foreach (Tweak tweak in Tweaks.tweaks)
+                if (cat.Tweaks.Count > 0)
                 {
-                    if (tweak.type == Tweak.controlType.toggle)
+                    addCategory(cat.Title);
+                    foreach (Tweak tweak in cat.Tweaks)
                     {
-                        ToggleSwitch control = new ToggleSwitch();
+                        if (tweak.type == Tweak.controlType.toggle)
+                        {
+                            ToggleSwitch control = new ToggleSwitch();
+                            control.Tag = tweak;
+                            control.Header = tweak.title;
+                            if (tweak.description != "")
+                                control.Content = tweak.description;
 
-                        control.Header = tweak.title;
-                        if (tweak.description != "")
-                            control.Content = tweak.description;
+                            control.FontSize = 22;
 
-                        control.FontSize = 22;
+                            //get valuelolo
+                            if (tweak.keyType == Tweak.tweakType.dword)
+                            {
+                                uint val = Registry.ReadDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName());
+                                control.IsChecked = (val == tweak.onValue);
+#if DEBUG
+                                System.Diagnostics.Debug.WriteLine(tweak.title + " = " + val);
+#endif
+                            }
+                            else if (tweak.keyType == Tweak.tweakType.str)
+                            {
+                                string val = Registry.ReadString(tweak.getHive(), tweak.getKeyName(), tweak.getValueName());
+                                control.IsChecked = (val == tweak.strOnValue);
+#if DEBUG
+                                System.Diagnostics.Debug.WriteLine(tweak.title + " = " + val);
+#endif
+                            }
 
-                        //get valuelolo
-                        if (tweak.keyType == Tweak.tweakType.dword)
+                            control.Checked += new EventHandler<RoutedEventArgs>(control_Checked);
+                            control.Unchecked += new EventHandler<RoutedEventArgs>(control_Checked);
+
+                            controlsPanel.Children.Add(control);
+                        }
+                        else if (tweak.type == Tweak.controlType.selector)
+                        {
+                            ListPicker lp = new ListPicker();
+                            lp.Tag = tweak;
+                            lp.Header = tweak.title;
+                            lp.ItemsSource = tweak.options;
+                            lp.SetValue(ListPicker.ItemCountThresholdProperty, 10);
+                            if (tweak.keyType == Tweak.tweakType.dword)
+                            {
+                                uint val = Registry.ReadDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName());
+                                foreach (var opt in tweak.options)
+                                {
+                                    if (opt.IntValue == val)
+                                    {
+                                        lp.SelectedItem = opt;
+                                        break;
+                                    }
+                                }
+#if DEBUG
+                                System.Diagnostics.Debug.WriteLine(tweak.title + " = " + val);
+#endif
+                            }
+                            else if (tweak.keyType == Tweak.tweakType.str)
+                            {
+                                string val = Registry.ReadString(tweak.getHive(), tweak.getKeyName(), tweak.getValueName());
+                                foreach (var opt in tweak.options)
+                                {
+                                    if (opt.Value == val)
+                                    {
+                                        lp.SelectedItem = opt;
+                                        break;
+                                    }
+                                }
+#if DEBUG
+                                System.Diagnostics.Debug.WriteLine(tweak.title + " = " + val);
+#endif
+                            }
+                            lp.SelectionChanged += new SelectionChangedEventHandler(lp_SelectionChanged);
+                            lp.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(lp_Tap);
+                            controlsPanel.Children.Add(lp);
+                        }
+                        else if (tweak.type == Tweak.controlType.slider)
                         {
                             uint val = Registry.ReadDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName());
-                            control.IsChecked = (val == tweak.onValue);
-#if DEBUG
-                            System.Diagnostics.Debug.WriteLine(tweak.title + " = " + val);
-#endif
-                        }
-                        else if (tweak.keyType == Tweak.tweakType.str)
-                        {
-                            string val = Registry.ReadString(tweak.getHive(), tweak.getKeyName(), tweak.getValueName());
-                            control.IsChecked = (val == tweak.strOnValue);
-#if DEBUG
-                            System.Diagnostics.Debug.WriteLine(tweak.title + " = " + val);
-#endif
-                        }
-
-                        control.Checked += new EventHandler<RoutedEventArgs>(control_Checked);
-                        control.Unchecked += new EventHandler<RoutedEventArgs>(control_Checked);
-
-                        controlsPanel.Children.Add(control);
-                    }
-                    else if (tweak.type == Tweak.controlType.selector)
-                    {
-                        ListPicker lp = new ListPicker();
-                        lp.Header = tweak.title;
-                        lp.ItemsSource = tweak.options;
-                        lp.SetValue(ListPicker.ItemCountThresholdProperty, 10);
-                        if (tweak.keyType == Tweak.tweakType.dword)
-                        {
-                            uint val = Registry.ReadDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName());
-                            foreach (var opt in tweak.options)
+                            if (val < tweak.minValue)
                             {
-                                if (opt.IntValue == val)
-                                {
-                                    lp.SelectedItem = opt;
-                                    break;
-                                }
+                                val = (uint)tweak.minValue;
                             }
-#if DEBUG
-                            System.Diagnostics.Debug.WriteLine(tweak.title + " = " + val);
-#endif
-                        }
-                        else if (tweak.keyType == Tweak.tweakType.str)
-                        {
-                            string val = Registry.ReadString(tweak.getHive(), tweak.getKeyName(), tweak.getValueName());
-                            foreach (var opt in tweak.options)
+                            else if (val > tweak.maxValue)
                             {
-                                if (opt.Value == val)
-                                {
-                                    lp.SelectedItem = opt;
-                                    break;
-                                }
+                                val = (uint)tweak.maxValue;
                             }
-#if DEBUG
-                            System.Diagnostics.Debug.WriteLine(tweak.title + " = " + val);
-#endif
+
+                            StackPanel sliderStack = new StackPanel();
+                            Grid vertStack = new Grid();
+
+                            TextBlock tb2 = new TextBlock();
+                            tb2.FontSize = (double)Application.Current.Resources["PhoneFontSizeNormal"];
+                            tb2.Padding = new Thickness(10, 0, 0, 0);
+                            tb2.Text = tweak.title;
+                            tb2.FontFamily = (FontFamily)Application.Current.Resources["PhoneFontFamilyNormal"];
+                            tb2.Foreground = (Brush)Application.Current.Resources["PhoneSubtleBrush"];
+                            vertStack.Children.Add(tb2);
+
+                            TextBlock tb = new TextBlock();
+                            tb.FontSize = 18;
+                            tb.Text = val.ToString();
+                            tb.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                            tb.Margin = new Thickness(0, 0, 10, 0);
+                            vertStack.Children.Add(tb);
+                            sliderStack.Children.Add(vertStack);
+
+                            Slider sl = new Slider();
+                            sl.Tag = tweak;
+                            sl.Name = tweak.title;
+                            sl.Minimum = tweak.minValue;
+                            sl.Maximum = tweak.maxValue;
+                            sl.SmallChange = 1;
+                            sl.LargeChange = 2;
+
+                            sl.Value = val;
+
+                            sl.ValueChanged += sl_ValueChanged;
+                            sliderStack.Children.Add(sl);
+                            controlsPanel.Children.Add(sliderStack);
+
                         }
-                        lp.SelectionChanged += new SelectionChangedEventHandler(lp_SelectionChanged);
-                        lp.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(lp_Tap);
-                        controlsPanel.Children.Add(lp);
-                    }
-                    else if (tweak.type == Tweak.controlType.title)
-                    {
-                        addCategory(tweak.title);
-                    }
-                    else if (tweak.type == Tweak.controlType.slider)
-                    {
-                        uint val = Registry.ReadDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName());
-                        if (val < tweak.minValue)
-                        {
-                            val = (uint)tweak.minValue;
-                        }
-                        else if (val > tweak.maxValue)
-                        {
-                            val = (uint)tweak.maxValue;
-                        }
-
-                        StackPanel sliderStack = new StackPanel();
-                        Grid vertStack = new Grid();
-
-                        TextBlock tb2 = new TextBlock();
-                        tb2.FontSize = (double)Application.Current.Resources["PhoneFontSizeNormal"];
-                        tb2.Padding = new Thickness(10, 0, 0, 0);
-                        tb2.Text = tweak.title;
-                        tb2.FontFamily = (FontFamily)Application.Current.Resources["PhoneFontFamilyNormal"];
-                        tb2.Foreground = (Brush)Application.Current.Resources["PhoneSubtleBrush"];
-                        vertStack.Children.Add(tb2);
-
-                        TextBlock tb = new TextBlock();
-                        tb.FontSize = 18;
-                        tb.Text = val.ToString();
-                        tb.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                        tb.Margin = new Thickness(0, 0, 10, 0);
-                        vertStack.Children.Add(tb);
-                        sliderStack.Children.Add(vertStack);
-
-                        Slider sl = new Slider();
-                        sl.Name = tweak.title;
-                        sl.Minimum = tweak.minValue;
-                        sl.Maximum = tweak.maxValue;
-                        sl.SmallChange = 1;
-                        sl.LargeChange = 2;
-
-                        sl.Value = val;
-
-                        sl.ValueChanged += sl_ValueChanged;
-                        sliderStack.Children.Add(sl);
-                        controlsPanel.Children.Add(sliderStack);
-
                     }
                 }
-            }
-            else
-            {
-                LayoutRoot.Visibility = System.Windows.Visibility.Collapsed;
             }
 
         }
@@ -170,22 +165,16 @@ namespace wphTweaks
             if (oldVal != newVal)
             {
                 tb.Text = (newVal).ToString();
-                foreach (Tweak tweak in Tweaks.tweaks)
+                Tweak tweak = (Tweak)sl.Tag;
+                Registry.CreateKey(tweak.getHive(), tweak.getKeyName());
+
+                Registry.WriteDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), newVal);
+                if (Registry.LastError != 0)
                 {
-                    if (tweak.title == sl.Name)
-                    {
-                        Registry.CreateKey(tweak.getHive(), tweak.getKeyName());
-
-                        Registry.WriteDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), newVal);
-                        if (Registry.LastError != 0)
-                        {
-                            MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
-                        }
-                        if (tweak.rebootNeeded)
-                            rbneeded();
-                    }
-
+                    MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
                 }
+                if (tweak.rebootNeeded)
+                    rbneeded();
             }
 
 
@@ -287,13 +276,7 @@ namespace wphTweaks
                 NavigationService.Navigate(new Uri("/DisclaimerPage.xaml", UriKind.Relative));
             }
 
-            //if (!WP7RootToolsSDK.Environment.HasRootAccess())
-            {
-                //NavigationService.Navigate(new Uri("/NeedsRoot.xaml", UriKind.Relative));
-            }
-
             LayoutRoot.Visibility = System.Windows.Visibility.Visible;
-            UpdateChecker.CheckUpdatesAsync();
         }
 
         void picker_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -312,42 +295,36 @@ namespace wphTweaks
             if (!cooldown)
             {
                 ListPicker ctrl = (ListPicker)sender;
-
-                foreach (Tweak tweak in Tweaks.tweaks)
+                Tweak tweak = (Tweak)ctrl.Tag;
+                if (tweak.keyType == Tweak.tweakType.str)
                 {
-                    if (tweak.title == (string)ctrl.Header)
+                    string val = ((SelectorTweak)ctrl.SelectedItem).Value;
+                    Registry.WriteString(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), val);
+                    if (Registry.LastError != 0)
                     {
-                        if (tweak.keyType == Tweak.tweakType.str)
-                        {
-                            string val = ((SelectorTweak)ctrl.SelectedItem).Value;
-                            Registry.WriteString(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), val);
-                            if (Registry.LastError != 0)
-                            {
-                                MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
+                        MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
 
-                            }
-                            System.Diagnostics.Debug.WriteLine(val);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                Registry.CreateKey(tweak.getHive(), tweak.getKeyName());
-                            }
-                            catch
-                            {
-                            }
-                            int val = ((SelectorTweak)ctrl.SelectedItem).IntValue;
-                            Registry.WriteDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), (uint)val);
-                            if (Registry.LastError != 0)
-                            {
-                                MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
-
-                            }
-                            if (tweak.rebootNeeded)
-                                rbneeded();
-                        }
                     }
+                    System.Diagnostics.Debug.WriteLine(val);
+                }
+                else
+                {
+                    try
+                    {
+                        Registry.CreateKey(tweak.getHive(), tweak.getKeyName());
+                    }
+                    catch
+                    {
+                    }
+                    int val = ((SelectorTweak)ctrl.SelectedItem).IntValue;
+                    Registry.WriteDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), (uint)val);
+                    if (Registry.LastError != 0)
+                    {
+                        MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
+
+                    }
+                    if (tweak.rebootNeeded)
+                        rbneeded();
                 }
             }
         }
@@ -357,43 +334,38 @@ namespace wphTweaks
             if (!cooldown)
             {
                 ToggleSwitch ctrl = (ToggleSwitch)sender;
+                Tweak tweak = (Tweak)ctrl.Tag;
 
-                foreach (Tweak tweak in Tweaks.tweaks)
+                if (tweak.keyType == Tweak.tweakType.dword)
                 {
-                    if (tweak.title == (string)ctrl.Header)
+                    try
                     {
-                        if (tweak.keyType == Tweak.tweakType.dword)
-                        {
-                            try
-                            {
-                                Registry.CreateKey(tweak.getHive(), tweak.getKeyName());
-                            }
-                            catch
-                            {
-                            }
-                            int val = (ctrl.IsChecked.Value ? tweak.onValue : tweak.offValue);
-                            Registry.WriteDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), (uint)val);
-                            if (Registry.LastError != 0)
-                            {
-                                MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
-
-                            }
-                        }
-                        else
-                        {
-                            string val = (ctrl.IsChecked.Value ? tweak.strOnValue : tweak.strOffValue);
-                            Registry.WriteString(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), val);
-                            if (Registry.LastError != 0)
-                            {
-                                MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
-
-                            }
-                        }
-                        if (tweak.rebootNeeded)
-                        {
-                            rbneeded();
-                        }
+                        Registry.CreateKey(tweak.getHive(), tweak.getKeyName());
                     }
+                    catch
+                    {
+                    }
+                    int val = (ctrl.IsChecked.Value ? tweak.onValue : tweak.offValue);
+                    Registry.WriteDWORD(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), (uint)val);
+                    if (Registry.LastError != 0)
+                    {
+                        MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
+
+                    }
+                }
+                else
+                {
+                    string val = (ctrl.IsChecked.Value ? tweak.strOnValue : tweak.strOffValue);
+                    Registry.WriteString(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), val);
+                    if (Registry.LastError != 0)
+                    {
+                        MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
+
+                    }
+                }
+                if (tweak.rebootNeeded)
+                {
+                    rbneeded();
                 }
             }
         }
@@ -410,11 +382,7 @@ namespace wphTweaks
 
         private void btnRestart_Click(object sender, RoutedEventArgs e)
         {
-            uint stuff = 0;
-            uint thingy = CRPCComponent.System_Reboot(out stuff);
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine(stuff + " - " + thingy);
-#endif
+            Reboot();
         }
 
         private void btnBrandedUpdates_Click(object sender, RoutedEventArgs e)
@@ -451,16 +419,23 @@ namespace wphTweaks
         {
             //WP7RootToolsSDK.FileSystem.DeleteFile(@"\Windows\mologo.bmp");
         }
+        public static void Reboot()
+        {
+            if (!HomebrewHelperWP.Tools.SystemTools.Reboot())
+            {
+                MessageBox.Show("Automatic rebooting is not available on this device. Please reboot manually using the power button.");
+            }
+            else
+            {
+                MessageBox.Show("Windows Phone should reboot shortly. Please wait and don't do anything to prevent data loss.");
+            }
+        }
 
         public static void rbneeded()
         {
             if (MessageBox.Show("Reboot needed for this change to take effect. Reboot now?", "Reboot Needed", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                uint stuff = 0;
-                uint thingy = CRPCComponent.System_Reboot(out stuff);
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine(stuff + " - " + thingy);
-#endif
+                Reboot();
             }
         }
 

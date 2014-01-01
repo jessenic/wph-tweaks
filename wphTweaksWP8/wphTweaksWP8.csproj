@@ -101,9 +101,6 @@
     <Reference Include="Processes">
       <HintPath>..\Libs\Processes.winmd</HintPath>
     </Reference>
-    <Reference Include="RPCComponent">
-      <HintPath>..\Libs\RPCComponent.winmd</HintPath>
-    </Reference>
     <Reference Include="SharpZipLib.WindowsPhone7">
       <HintPath>..\packages\ImageTools_JpegWP7.1.0.7\lib\sl3-wp\SharpZipLib.WindowsPhone7.dll</HintPath>
     </Reference>
@@ -149,7 +146,11 @@
     <Compile Include="SoundEditor.xaml.cs">
       <DependentUpon>SoundEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tweak.cs" />
+    <Compile Include="Tweaks\CustomizationTweaks.cs" />
+    <Compile Include="Tweaks\SamsungTweaks.cs" />
+    <Compile Include="Tweaks\Tweaks.cs" />
+    <Compile Include="Tweaks\SystemTweaks.cs" />
+    <Compile Include="Tweaks\Tweak.cs" />
     <Compile Include="UpdateChecker.cs" />
   </ItemGroup>
   <ItemGroup>
