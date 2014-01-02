@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Info;
 
 namespace wphTweaks
 {
@@ -29,8 +30,8 @@ namespace wphTweaks
         {
             try
             {
-                System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings.Remove("disclaimer");
-                System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings.Add("disclaimer", true);
+                System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings.Remove("disclaimer2");
+                System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings.Add("disclaimer2", true);
                 System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings.Save();
             }
             catch
@@ -38,6 +39,8 @@ namespace wphTweaks
             }
             if (e.NewValue > 7)
             {
+                slider1.IsEnabled = false;
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("device", DeviceStatus.DeviceManufacturer + " " + DeviceStatus.DeviceName, "OS: " + Environment.OSVersion.Version + ", FW: " + DeviceStatus.DeviceFirmwareVersion + ", HW: " + DeviceStatus.DeviceHardwareVersion, 0);
                 GoogleAnalytics.EasyTracker.GetTracker().SendTiming(DateTime.Now.Subtract(navigateTime), "Disclaimer", "ReadTime", "Disclaimer Read Time");
                 if (NavigationService.CanGoBack)
                 {

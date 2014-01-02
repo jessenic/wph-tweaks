@@ -271,7 +271,7 @@ namespace wphTweaks
         {
             //Disclaimer
             bool disclaimer = false;
-            System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings.TryGetValue<bool>("disclaimer", out disclaimer);
+            System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings.TryGetValue<bool>("disclaimer2", out disclaimer);
             if (!disclaimer)
             {
                 NavigationService.Navigate(new Uri("/DisclaimerPage.xaml", UriKind.Relative));
