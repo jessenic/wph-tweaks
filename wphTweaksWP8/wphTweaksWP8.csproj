@@ -55,6 +55,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CShellChromeAPI">
+      <HintPath>..\Libs\CShellChromeAPI.winmd</HintPath>
+    </Reference>
     <Reference Include="GoogleAnalytics">
       <HintPath>..\packages\GoogleAnalyticsSDK.1.1.01\lib\windowsphone8\GoogleAnalytics.dll</HintPath>
     </Reference>
@@ -85,6 +88,9 @@
     <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit">
       <HintPath>..\packages\WPtoolkit.4.2013.08.16\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="NativeToastLauncher">
+      <HintPath>..\Libs\NativeToastLauncher.dll</HintPath>
     </Reference>
     <Reference Include="PhoneCodeContractsAssemblies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -128,6 +134,9 @@
     <Compile Include="..\wphTweaks\PullDownToRefreshPanel.cs">
       <Link>PullDownToRefreshPanel.cs</Link>
     </Compile>
+    <Compile Include="..\wphTweaks\Rearrange.xaml.cs">
+      <Link>Rearrange.xaml.cs</Link>
+    </Compile>
     <Compile Include="..\wphTweaks\ReorderListBox.cs">
       <Link>ReorderListBox.cs</Link>
     </Compile>
@@ -169,6 +178,11 @@
     </Page>
     <Page Include="..\wphTweaks\pivotSplash.xaml">
       <Link>pivotSplash.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\wphTweaks\Rearrange.xaml">
+      <Link>Rearrange.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

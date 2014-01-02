@@ -267,17 +267,13 @@ namespace wphTweaks
                         MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
 
                     }
+                    NativeToastLauncher.Launcher.LaunchToast(Guid.Parse("{a85aaecb-e288-4b19-a8e0-fca5d0f2a444}"), "app://5B04B775-356B-4AA0-AAF8-6491FFEA5663/_default", "WPH Tweaks", "Tap to open IE settings", NativeToastLauncher.ToastType.Default);
                 });
                 cmb.Show();
             }
             catch
             {
             }
-            //TODO: Find a fix
-            //uint id = Processes.NativeProcess.CreateProc(@"C:\Programs\InternetExplorer\BrowserSettingsHost.exe");
-            //MessageBox.Show(id.ToString());
-            //MessageBox.Show("Failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
-            //CSharp___DllImport.Phone.AppLauncher.LaunchBuiltInApplication(CSharp___DllImport.Phone.AppLauncher.Apps.Internet7Settings, "_default");
         }
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
