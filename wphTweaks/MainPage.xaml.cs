@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Info;
 
 namespace wphTweaks
 {
@@ -23,7 +24,7 @@ namespace wphTweaks
             InitializeComponent();
 
             // Check for root
-            if (WP7RootToolsSDK.Environment.HasRootAccess())
+            if (WP7RootToolsSDK.Environment.HasRootAccess() && !Mangopollo.Utils.IsWP8)
             {
                 // Add the quick toggles defined in Tweaks
                 foreach (Tweak tweak in Tweaks.tweaks)
@@ -131,6 +132,19 @@ namespace wphTweaks
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
+            if (Mangopollo.Utils.IsWP8)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("wrongdevice", DeviceStatus.DeviceManufacturer + " " + DeviceStatus.DeviceName, "OS: " + Environment.OSVersion.Version + ", FW: " + DeviceStatus.DeviceFirmwareVersion + ", HW: " + DeviceStatus.DeviceHardwareVersion, 0);
+                MessageBox.Show("This app is for Windows Phone 7 and you seem to have Windows Phone 8. Please downlad the Windows Phone 8 version instead.");
+                if (NavigationService.CanGoBack)
+                {
+                    while (NavigationService.RemoveBackEntry() != null)
+                    {
+                        NavigationService.RemoveBackEntry();
+                    }
+                }
+                return;
+            }
             //Disclaimer
             bool disclaimer = false;
             System.IO.IsolatedStorage.IsolatedStorageSettings.ApplicationSettings.TryGetValue<bool>("disclaimer2", out disclaimer);
