@@ -23,6 +23,7 @@ namespace wphTweaks
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             NavigationService.RemoveBackEntry();
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("app", "noroot", null, 0);
         }
     }
 }

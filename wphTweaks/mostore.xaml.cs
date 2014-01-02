@@ -22,6 +22,7 @@ namespace wphTweaks
 
         void doMOChange(string store, string id)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("mostore", "save_" + id, "Save mostore " + store, 0);
             string str = "<ConfigurationFile version=\"1\">    <OEMStore>        <setting id=\"OEMName\"></setting>        <setting id=\"OEMStoreName\">" + store + "</setting>        <setting id=\"OEMStoreID\">" + id + "</setting>        <setting id=\"OEMStoreEnabled\">True</setting>    </OEMStore></ConfigurationFile>";
             WP7RootToolsSDK.FileSystem.WriteFile(@"\My Documents\Zune\PimentoCache\Keepers\LKG_OEMStoreConfig.xml", System.Text.UTF8Encoding.UTF8.GetBytes(str));
             MainPage.rbneeded();

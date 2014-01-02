@@ -41,6 +41,7 @@ namespace wphTweaks
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("keyboard", "save", "Keyboard Save", 0);
             try
             {
                 tbAlternates.Text = tbAlternates.Text.Replace("\n", "");

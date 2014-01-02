@@ -35,7 +35,7 @@ namespace wphTweaks
                         control.Header = tweak.title;
                         if (tweak.description != "")
                             control.Content = tweak.description;
-                        
+
                         control.FontSize = 22;
 
                         //get valuelolo
@@ -90,14 +90,14 @@ namespace wphTweaks
             {
                 LayoutRoot.Visibility = System.Windows.Visibility.Collapsed;
             }
-             
+
         }
 
         void rearrangeSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/Rearrange.xaml", UriKind.Relative));
         }
-        
+
         void addCategory(string str)
         {
             TextBlock tb2 = new TextBlock();
@@ -108,14 +108,18 @@ namespace wphTweaks
 
         void btn_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tools", "clicked", "Add Google", 0);
             //HKCU\Software\Microsoft\Internet Explorer\SearchProviders\Google\URL
             //http://www.google.com/search?hl=en&q={searchTerms}&meta=
             try
             {
                 WP7RootToolsSDK.Registry.CreateKey(WP7RootToolsSDK.RegistryHive.CurrentUser, @"Software\Microsoft\Internet Explorer\SearchProviders\Google");
-            } catch {
             }
-            try {
+            catch
+            {
+            }
+            try
+            {
                 WP7RootToolsSDK.Registry.SetStringValue(WP7RootToolsSDK.RegistryHive.CurrentUser, @"Software\Microsoft\Internet Explorer\SearchProviders\Google", "URL", "http://www.google.com/search?hl=en&q={searchTerms}&meta=");
             }
             catch
@@ -124,7 +128,7 @@ namespace wphTweaks
 
             CSharp___DllImport.Phone.AppLauncher.LaunchBuiltInApplication(CSharp___DllImport.Phone.AppLauncher.Apps.Internet7Settings, "_default");
         }
-     
+
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             //Disclaimer
@@ -166,6 +170,7 @@ namespace wphTweaks
                 {
                     if (tweak.title == (string)ctrl.Header)
                     {
+                        GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tweaks", "selected", tweak.title, ctrl.SelectedIndex);
                         if (tweak.keyType == Tweak.tweakType.str)
                         {
                             string val = ((SelectorTweak)ctrl.SelectedItem).Value;
@@ -174,9 +179,12 @@ namespace wphTweaks
                         }
                         else
                         {
-                            try {
+                            try
+                            {
                                 WP7RootToolsSDK.Registry.CreateKey(tweak.getHive(), tweak.getKeyName());
-                            } catch {
+                            }
+                            catch
+                            {
                             }
                             int val = ((SelectorTweak)ctrl.SelectedItem).IntValue;
                             WP7RootToolsSDK.Registry.SetDWordValue(tweak.getHive(), tweak.getKeyName(), tweak.getValueName(), (uint)val);
@@ -198,6 +206,7 @@ namespace wphTweaks
                 {
                     if (tweak.title == (string)ctrl.Header)
                     {
+                        GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tweaks", "checked", tweak.title, ctrl.IsChecked.Value ? 1 : 0);
                         if (tweak.keyType == Tweak.tweakType.dword)
                         {
                             try
@@ -236,11 +245,16 @@ namespace wphTweaks
 
         private void btnRestart_Click(object sender, RoutedEventArgs e)
         {
-            CSharp___DllImport.Phone.OS.Shutdown(CSharp___DllImport.EWX.EWX_REBOOT);
+            if (MessageBox.Show("Are you sure you want to restart the phone?", "Confirmation", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
+                GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tools", "click", "Reboot", 0);
+                CSharp___DllImport.Phone.OS.Shutdown(CSharp___DllImport.EWX.EWX_REBOOT);
+            }
         }
 
         private void btnBrandedUpdates_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tools", "click", "Branded Updates", 0);
             var old = "";
             String[] obvals = { "MOName", "OemName", "MobileOperator" };
             foreach (String val in obvals)
@@ -253,24 +267,27 @@ namespace wphTweaks
 
         private void btnEnableBrandedUpdates_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tools", "click", "Enable Branded Updates", 0);
             var old = "";
             String[] obvals = { "MOName", "OemName", "MobileOperator" };
-           
+
             foreach (String val in obvals)
             {
                 old = WP7RootToolsSDK.Registry.GetStringValue(WP7RootToolsSDK.RegistryHive.LocalMachine, @"System\Platform\DeviceTargetingInfo", val);
                 WP7RootToolsSDK.Registry.SetStringValue(WP7RootToolsSDK.RegistryHive.LocalMachine, @"System\Platform\DeviceTargetingInfo", val, old.Replace("_blocked", ""));
             }
-            
+
         }
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tools", "click", "Disable carrier logo", 0);
             WP7RootToolsSDK.FileSystem.CopyFile(@"\Applications\Install\abc1e9fe-b4ab-402c-ab21-11e97e3fde3a\Install\SplashScreenImage.jpg", @"\Windows\mologo.bmp");
         }
 
         private void btnRestoreCarrierLogo_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tools", "click", "Restore carrier logo", 0);
             WP7RootToolsSDK.FileSystem.DeleteFile(@"\Windows\mologo.bmp");
         }
 

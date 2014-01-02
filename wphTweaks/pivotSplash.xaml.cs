@@ -15,9 +15,9 @@ using System.IO.IsolatedStorage;
 using ImageTools.IO.Bmp;
 using ImageTools.IO;
 using ImageTools;
+using System.Windows.Media.Imaging;
 #if WP8
 using HomebrewHelperWP;
-using System.Windows.Media.Imaging;
 #endif
 
 namespace wphTweaks

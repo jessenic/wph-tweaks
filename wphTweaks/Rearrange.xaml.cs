@@ -46,6 +46,7 @@ namespace wphTweaks
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("rearrangeSettings", "save", "Rearrange settings", 0);
             int i = 0;
             foreach (settingid id in settings)
             {
