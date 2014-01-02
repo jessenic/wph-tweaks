@@ -14,64 +14,73 @@ using HomebrewHelperWP;
 
 namespace wphTweaks
 {
+    public enum TweakType { DWORD, String }
+
+    public class ToggleTweak : Tweak
+    {
+        public object OnValue = 1;
+        public object OffValue = 0;
+        public string Description = string.Empty;
+    }
+
+    public class SliderTweak : Tweak
+    {
+        public int MinValue;
+        public int MaxValue;
+        public int DefaultValue;
+    }
+
+    public class SelectorTweak : Tweak
+    {
+        public List<SelectorTweakItem> Options;
+    }
+
     public class Tweak
     {
-        public enum tweakType { dword = 0, str }
-        public enum controlType { toggle = 0, slider, selector }
-        public string title;
+        public string Title;
 
-        public string key;
+        public string Key;
 
-        public tweakType keyType;
+        public TweakType KeyType;
 
-        public string defaultString;
-        public int defaultInt;
+        public bool RebootNeeded;
 
-        public controlType type;
-        public bool rebootNeeded;
+        public Version RequiredOSVersion;
 
-        //slider
-        public int minValue;
-        public int maxValue;
-
-        //toggle
-        public int onValue = 1;
-        public int offValue = 0;
-        public string strOnValue;
-        public string strOffValue;
-        public string description;
-
-
-        //selector
-        public List<SelectorTweak> options;
-
-        public RegistryHive getHive()
+        public RegistryHive Hive
         {
-            string firstFour = key.Substring(0, 4);
-            switch (firstFour)
+            get
             {
-                case "HKLM":
-                    return RegistryHive.HKLM;
-                case "HKCU":
-                    return RegistryHive.HKCU;
+                switch (Key.Substring(0, 4).ToUpper())
+                {
+                    case "HKLM":
+                        return RegistryHive.HKLM;
+                    case "HKCU":
+                        return RegistryHive.HKCU;
+                }
+                return RegistryHive.HKLM;
             }
-            return RegistryHive.HKLM;
         }
-        public string getValueName()
+        public string ValueName
         {
-            return key.Substring(key.LastIndexOf("\\") + 1);
+            get
+            {
+                return Key.Substring(Key.LastIndexOf("\\") + 1);
+            }
         }
-        public string getKeyName()
+        public string KeyName
         {
-            return key.Substring(5, key.LastIndexOf("\\") - 5);
+            get
+            {
+                return Key.Substring(5, Key.LastIndexOf("\\") - 5);
+            }
         }
     }
 
-    public class SelectorTweak
+    public class SelectorTweakItem
     {
         public string Title { get; set; }
-        public string Value { get; set; }
-        public int IntValue { get; set; }
+        public object Value { get; set; }
         public override string ToString()
         {
             return Title;

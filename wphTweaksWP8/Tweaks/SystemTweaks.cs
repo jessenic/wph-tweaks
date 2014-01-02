@@ -11,66 +11,89 @@ namespace wphTweaks.Tweaks
         public SystemTweaks()
         {
             Title = "System Settings";
-            Tweak t;
 
-            t = new Tweak();
-            t.title = "'Never' timeout option";
-            t.onValue = 0;
-            t.offValue = 1;
-            t.key = @"HKLM\SOFTWARE\Microsoft\Settings\Lock\DisableNever";
-            Tweaks.Add(t);
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "'Never' screen timeout option",
+                OnValue = 0,
+                OffValue = 1,
+                Key = @"HKLM\SOFTWARE\Microsoft\Settings\Lock\DisableNever"
+            });
 
-            t = new Tweak();
-            t.title = "Allow disabling camera shutter sound";
-            t.onValue = 0;
-            t.offValue = 1;
-            t.key = @"HKLM\SOFTWARE\Microsoft\EventSounds\Sounds\Camera\Locked";
-            Tweaks.Add(t);
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Smaller text in system apps",
+                RequiredOSVersion = Versions.GDR3,
+                Key = @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Control Panel\Theme\LargeScreen",
+                RebootNeeded = true
+            });
 
-            t = new Tweak();
-            t.title = "Large screen mode (GDR3)";
-            t.onValue = 1;
-            t.offValue = 0;
-            t.rebootNeeded = true;
-            t.key = @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Control Panel\Theme\LargeScreen";
-            Tweaks.Add(t);
+            var startscreensizes = new List<SelectorTweakItem>();
+            startscreensizes.Add(new SelectorTweakItem()
+            {
+                Title = "Small (2 medium tiles)",
+                Value = 0
+            });
+            startscreensizes.Add(new SelectorTweakItem()
+            {
+                Title = "Medium (3 medium tiles)",
+                Value = 1
+            });
+            startscreensizes.Add(new SelectorTweakItem()
+            {
+                Title = "Big (3 medium tiles)",
+                Value = 2
+            });
+            Tweaks.Add(new SelectorTweak()
+            {
+                Title = "Start screen size",
+                RequiredOSVersion = Versions.GDR3,
+                Key = @"HKLM\Software\Microsoft\Shell\OEM\Start\ScreenSize",
+                RebootNeeded = true,
+                Options = startscreensizes
+            });
 
-            t = new Tweak();
-            t.title = "Big screen for start screen (GDR3)";
-            t.onValue = 2;
-            t.offValue = 0;
-            t.key = @"HKLM\Software\Microsoft\Shell\OEM\Start\ScreenSize";
-            t.rebootNeeded = true;
-            Tweaks.Add(t);
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Save maps to SD card",
+                OnValue = 1,
+                OffValue = 0,
+                Key = @"HKLM\System\Maps\Storage\UseExternalStorage"
+            });
 
-            t = new Tweak();
-            t.title = "Save maps to SD card";
-            t.onValue = 1;
-            t.offValue = 0;
-            t.key = @"HKLM\System\Maps\Storage\UseExternalStorage";
-            Tweaks.Add(t);
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Disable FM Radio option",
+                OnValue = 1,
+                OffValue = 0,
+                Key = @"HKLM\Software\Microsoft\FMRadio\OEM\NotPresent"
+            });
 
-            t = new Tweak();
-            t.title = "Disable FM Radio";
-            t.onValue = 1;
-            t.offValue = 0;
-            t.key = @"HKLM\Software\Microsoft\FMRadio\OEM\NotPresent";
-            Tweaks.Add(t);
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Enable Data Sense WiFI hotspots",
+                OnValue = 1,
+                OffValue = 0,
+                Key = @"HKLM\Software\Microsoft\Data Sense\DSEnabled"
+            });
 
-            t = new Tweak();
-            t.title = "Enable Data Sense";
-            t.onValue = 1;
-            t.offValue = 0;
-            t.key = @"HKLM\Software\Microsoft\Data Sense\DSEnabled";
-            Tweaks.Add(t);
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Disable Start Menu Letters",
+                OnValue = 500,
+                OffValue = 45,
+                Key = @"HKLM\Software\Microsoft\Shell\Start\GroupingThreshold",
+                RebootNeeded = true
+            });
 
-            t = new Tweak();
-            t.title = "Disable Start Menu Letters";
-            t.onValue = 500;
-            t.offValue = 45;
-            t.key = @"HKLM\Software\Microsoft\Shell\Start\GroupingThreshold";
-            t.rebootNeeded = true;
-            Tweaks.Add(t);
+
+            //Not working?
+            //t = new Tweak();
+            //t.Title = "Allow disabling camera shutter sound";
+            //t.OnValue = 0;
+            //t.OffValue = 1;
+            //t.Key = @"HKLM\SOFTWARE\Microsoft\EventSounds\Sounds\Camera\Locked";
+            //Tweaks.Add(t);
 
         }
 

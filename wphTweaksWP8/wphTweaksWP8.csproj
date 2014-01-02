@@ -148,11 +148,13 @@
       <DependentUpon>SoundEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tweaks\CustomizationTweaks.cs" />
+    <Compile Include="Tweaks\NokiaTweaks.cs" />
     <Compile Include="Tweaks\SamsungTweaks.cs" />
     <Compile Include="Tweaks\Tweaks.cs" />
     <Compile Include="Tweaks\SystemTweaks.cs" />
     <Compile Include="Tweaks\Tweak.cs" />
     <Compile Include="UpdateChecker.cs" />
+    <Compile Include="Versions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="..\wphTweaks\App.xaml">

@@ -15,10 +15,14 @@ namespace wphTweaks.Tweaks
         {
             Categories.Add(new SystemTweaks());
             Categories.Add(new CustomizationTweaks());
-
-            if (DeviceStatus.DeviceManufacturer.ToLower().Equals("samsung"))
+            switch (DeviceStatus.DeviceManufacturer.ToUpper())
             {
-                Categories.Add(new SamsungTweaks());
+                case "SAMSUNG":
+                    Categories.Add(new SamsungTweaks());
+                    break;
+                case "NOKIA":
+                    Categories.Add(new NokiaTweaks());
+                    break;
             }
         }
     }

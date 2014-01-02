@@ -62,12 +62,9 @@
                 </DataTemplate>
             </controls:Pivot.HeaderTemplate>
             <controls:PivotItem Header="tweaks">
-                <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-                    <ScrollViewer Height="666" HorizontalAlignment="Left" Margin="6,6,0,0" Name="scrollViewer1" VerticalAlignment="Top" Width="444">
-                        <StackPanel Name="controlsPanel" Width="426" Orientation="Vertical" Loaded="controlsPanel_Loaded" />
-                    </ScrollViewer>
-
-                </Grid>
+                <ScrollViewer HorizontalAlignment="Left" Margin="18,6,12,0" Name="scrollViewer1" VerticalAlignment="Top">
+                    <StackPanel Name="controlsPanel" Orientation="Vertical" Loaded="controlsPanel_Loaded" />
+                </ScrollViewer>
             </controls:PivotItem>
             <controls:PivotItem Header="tools">
                 <ScrollViewer>
@@ -95,7 +92,7 @@
             <controls:PivotItem Header="about">
                 <Grid x:Name="aboutGrid">
                     <TextBlock Height="30" HorizontalAlignment="Left" Margin="15,37,0,0" Name="textBlock2" Text="Developed by Jaxbot and Jessenic" VerticalAlignment="Top" />
-                    <TextBlock Height="30" HorizontalAlignment="Left" Margin="14,68,0,0" Name="textBlock3" Text="WindowsPhoneHacker.com" VerticalAlignment="Top" />
+                    <HyperlinkButton Height="30" HorizontalAlignment="Left" Margin="14,68,0,0" Name="wphLink" Content="WindowsPhoneHacker.com" VerticalAlignment="Top" Click="wphLink_Click" />
                     <TextBlock Height="25" HorizontalAlignment="Left" Margin="14,8,0,0" Name="textBlock4" Text="Version 1.5" VerticalAlignment="Top" />
                     <TextBlock Height="30" HorizontalAlignment="Left" Margin="12,117,0,0" Name="textBlock5" Text="Powered by GoodDayToDie's native libraries" VerticalAlignment="Top" />
                 </Grid>
