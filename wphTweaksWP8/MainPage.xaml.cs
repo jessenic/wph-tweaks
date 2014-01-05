@@ -115,7 +115,11 @@ namespace wphTweaks
                         {
                             var tweak = (SliderTweak)t;
                             uint val = Registry.ReadDWORD(tweak.Hive, tweak.KeyName, tweak.ValueName);
-                            if (val < tweak.MinValue)
+                            if (val == 2147942487)
+                            {
+                                val = (uint)tweak.DefaultValue;
+                            }
+                            else if (val < tweak.MinValue)
                             {
                                 val = (uint)tweak.MinValue;
                             }

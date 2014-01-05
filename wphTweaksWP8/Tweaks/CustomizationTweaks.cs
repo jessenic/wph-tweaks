@@ -12,6 +12,15 @@ namespace wphTweaks.Tweaks
         {
             Title = "Customizations";
 
+            Tweaks.Add(new SliderTweak()
+            {
+                Title = "Recent people in people hub",
+                DefaultValue = 8,
+                Key = @"HKLM\Software\Microsoft\Pim\RecentList\8\MaxSize",
+                MinValue = 0,
+                MaxValue = 50
+            });
+
             Tweaks.Add(new ToggleTweak()
             {
                 Title = "Limit volume on reboot",
