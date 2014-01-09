@@ -21,6 +21,59 @@ namespace wphTweaks.Tweaks
                 MaxValue = 50
             });
 
+            var lockTimes = new List<SelectorTweakItem>();
+            lockTimes.Add(new SelectorTweakItem()
+            {
+                Title = "30 seconds",
+                Value = 30
+            });
+            lockTimes.Add(new SelectorTweakItem()
+            {
+                Title = "1 minute",
+                Value = 60
+            });
+            lockTimes.Add(new SelectorTweakItem()
+            {
+                Title = "3 minutes",
+                Value = 180
+            });
+            lockTimes.Add(new SelectorTweakItem()
+            {
+                Title = "5 minutes",
+                Value = 300
+            });
+            lockTimes.Add(new SelectorTweakItem()
+            {
+                Title = "15 minutes",
+                Value = 900
+            });
+            lockTimes.Add(new SelectorTweakItem()
+            {
+                Title = "30 minutes",
+                Value = 1800
+            });
+            lockTimes.Add(new SelectorTweakItem()
+            {
+                Title = "Never",
+                Value = 0
+            });
+
+            Tweaks.Add(new SelectorTweak()
+            {
+                Title = "Screen timeout in seconds",
+                Key = @"HKLM\SOFTWARE\Microsoft\Shell\Timeouts\DCUserIdle",
+                Options = lockTimes,
+                RebootNeeded = true
+            });
+
+            Tweaks.Add(new SelectorTweak()
+            {
+                Title = "Screen timeout in seconds when charging",
+                Key = @"HKLM\SOFTWARE\Microsoft\Shell\Timeouts\ACUserIdle",
+                Options = lockTimes,
+                RebootNeeded = true
+            });
+
             Tweaks.Add(new ToggleTweak()
             {
                 Title = "Limit volume on reboot",
