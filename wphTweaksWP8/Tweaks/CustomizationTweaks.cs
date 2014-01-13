@@ -91,6 +91,13 @@ namespace wphTweaks.Tweaks
 
             Tweaks.Add(new ToggleTweak()
             {
+                Title = "Data Activity indicators",
+                Key = @"HKLM\Software\Microsoft\Shell\OEM\SystemTray\DataActivity",
+                RebootNeeded = true
+            });
+
+            Tweaks.Add(new ToggleTweak()
+            {
                 Title = "Capacitive button vibration",
                 OnValue = 1,
                 OffValue = 0,
