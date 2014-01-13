@@ -21,148 +21,197 @@ namespace HomebrewHelperWP
         }
         public static string ReadString(RegistryHive hive, string path, string value)
         {
+            uint error = 0;
             string ret = string.Empty;
             try
             {
                 if (!NativeRegistry.ReadString((global::Registry.RegistryHive)hive, path, value, out ret))
                 {
-                    uint error = NativeRegistry.GetError();
-                    //ret = SammyReadString(hive, path, value, out error);
-                    LastError = error;
-                    //if (error != 0)
-                    //{
-                    //throw new Exception("Read failed: " + error);
-                    //}
-                }
-                else
-                {
-                    LastError = 0;
+                    error = NativeRegistry.GetError();
                 }
             }
             catch (Exception ex)
             {
-                LastError = (uint)ex.HResult;
+                error = (uint)ex.HResult;
             }
+
+            if (error != 0 && SammyHelper.UseSammy)
+            {
+                try
+                {
+                    ret = SammyHelper.SammyReadString(hive, path, value, out error);
+                    if (ret.ToLower().StartsWith("error in"))
+                    {
+                        ret = string.Empty;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    error = (uint)ex.HResult;
+                }
+            }
+            LastError = error;
             return ret;
         }
         public static uint ReadDWORD(RegistryHive hive, string path, string value)
         {
             uint ret = 0;
+            uint error = 0;
             try
             {
                 if (!NativeRegistry.ReadDWORD((global::Registry.RegistryHive)hive, path, value, out ret))
                 {
-                    uint error = NativeRegistry.GetError();
-                    if (SammyHelper.UseSammy)
-                    {
-                        ret = SammyHelper.SammyReadDWORD(hive, path, value, out error);
-                    }
-                    LastError = error;
-                    //if (error != 0)
-                    //{
-                    //throw new Exception("Read failed: " + error);
-                    //}
-                }
-                else
-                {
-                    LastError = 0;
+                    error = NativeRegistry.GetError();
                 }
             }
             catch (Exception ex)
             {
-                LastError = (uint)ex.HResult;
+                error = (uint)ex.HResult;
             }
+            if (error != 0 && SammyHelper.UseSammy)
+            {
+                try
+                {
+                    error = SammyHelper.SammyReadDWORD(hive, path, value, out ret);
+                }
+                catch (Exception ex)
+                {
+                    error = (uint)ex.HResult;
+                }
+            }
+            LastError = error;
             return ret;
         }
         public static void WriteString(RegistryHive hive, string path, string value, string data)
         {
+            uint error = 0;
             try
             {
                 if (!NativeRegistry.WriteString((global::Registry.RegistryHive)hive, path, value, data))
                 {
-                    LastError = NativeRegistry.GetError();
-                    if (SammyHelper.UseSammy)
-                    {
-                        uint retval;
-                        LastError = SammyHelper.SammyWriteString(hive, path, value, data, out retval);
-                    }
-                    //if (error != 0)
-                    //{
-                    //    throw new Exception("Write failed: " + error);
-                    //}
-                }
-                else
-                {
-                    LastError = 0;
+                    error = NativeRegistry.GetError();
                 }
             }
             catch (Exception ex)
             {
-                LastError = (uint)ex.HResult;
+                error = (uint)ex.HResult;
             }
+            if (error != 0 && SammyHelper.UseSammy)
+            {
+                try
+                {
+                    uint retval;
+                    error = SammyHelper.SammyWriteString(hive, path, value, data, out retval);
+                }
+                catch (Exception ex)
+                {
+                    error = (uint)ex.HResult;
+                }
+            }
+            LastError = error;
         }
         public static void WriteDWORD(RegistryHive hive, string path, string value, uint data)
         {
+            uint error = 0;
             try
             {
                 if (!NativeRegistry.WriteDWORD((global::Registry.RegistryHive)hive, path, value, data))
                 {
-                    LastError = NativeRegistry.GetError();
-                    if (SammyHelper.UseSammy)
-                    {
-                        uint retval;
-                        LastError = SammyHelper.SammyWriteDWORD(hive, path, value, data, out retval);
-                    }
-                    //if (error != 0)
-                    //{
-                    //    throw new Exception("Write failed: " + error);
-                    //}
-                }
-                else
-                {
-                    LastError = 0;
+                    error = NativeRegistry.GetError();
                 }
             }
             catch (Exception ex)
             {
-                LastError = (uint)ex.HResult;
+                error = (uint)ex.HResult;
             }
+
+            if (error != 0 && SammyHelper.UseSammy)
+            {
+                try
+                {
+                    uint retval;
+                    error = SammyHelper.SammyWriteDWORD(hive, path, value, data, out retval);
+                }
+                catch (Exception ex)
+                {
+                    error = (uint)ex.HResult;
+                }
+            }
+            LastError = error;
         }
 
         public static string[] GetSubKeyNames(RegistryHive hive, string path)
         {
             string[] ret = new string[] { };
-            if (!NativeRegistry.GetSubKeyNames((global::Registry.RegistryHive)hive, path, out ret))
+            uint error = 0;
+            try
             {
-                LastError = NativeRegistry.GetError();
+                if (!NativeRegistry.GetSubKeyNames((global::Registry.RegistryHive)hive, path, out ret))
+                {
+                    error = NativeRegistry.GetError();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                LastError = 0;
+                error = (uint)ex.HResult;
             }
+            LastError = error;
             return ret;
         }
 
         public static void RemoveValue(RegistryHive hive, string path, string value)
         {
-            LastError = 0;
-            if (!NativeRegistry.DeleteValue((global::Registry.RegistryHive)hive, path, value))
+            uint error = 0;
+            try
             {
-                LastError = NativeRegistry.GetError();
+                if (!NativeRegistry.DeleteValue((global::Registry.RegistryHive)hive, path, value))
+                {
+                    error = NativeRegistry.GetError();
+                }
             }
+            catch (Exception ex)
+            {
+                error = (uint)ex.HResult;
+            }
+
+            LastError = error;
+        }
+
+        public static void RemoveKey(RegistryHive hive, string path, bool recursive = true)
+        {
+            uint error = 0;
+            try
+            {
+                if (!NativeRegistry.DeleteKey((global::Registry.RegistryHive)hive, path, recursive))
+                {
+                    error = NativeRegistry.GetError();
+                }
+            }
+            catch (Exception ex)
+            {
+                error = (uint)ex.HResult;
+            }
+
+            LastError = error;
         }
 
 
         public static void CreateKey(RegistryHive hive, string path)
         {
-            if (!NativeRegistry.CreateKey((global::Registry.RegistryHive)hive, path))
+            uint error = 0;
+            try
             {
-                LastError = NativeRegistry.GetError();
+                if (!NativeRegistry.CreateKey((global::Registry.RegistryHive)hive, path))
+                {
+                    error = NativeRegistry.GetError();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                LastError = 0;
+                error = (uint)ex.HResult;
             }
+
+            LastError = error;
         }
     }
     public enum RegistryHive

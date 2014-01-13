@@ -111,6 +111,7 @@
     <Reference Include="System.Net.Http.Primitives">
       <HintPath>..\packages\Microsoft.Net.Http.2.1.10\lib\sl4-windowsphone71\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\wphTweaks\App.xaml.cs">
@@ -142,6 +143,9 @@
     </Compile>
     <Compile Include="..\wphTweaks\ReorderListBoxItem.cs">
       <Link>ReorderListBoxItem.cs</Link>
+    </Compile>
+    <Compile Include="CameraApps.xaml.cs">
+      <DependentUpon>CameraApps.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataConnectionStringsEditor.xaml.cs">
       <DependentUpon>DataConnectionStringsEditor.xaml</DependentUpon>
@@ -190,6 +194,10 @@
       <Link>Themes\Generic.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CameraApps.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataConnectionStringsEditor.xaml">
       <SubType>Designer</SubType>

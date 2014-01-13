@@ -373,7 +373,7 @@ namespace wphTweaks
                     if (val != newval)
                     {
                         GoogleAnalytics.EasyTracker.GetTracker().SendException("Tweak " + tweak.Title + " failed: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError, false);
-                        MessageBox.Show("Tweak failed!\nPossible error code: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
+                        MessageBox.Show("Tweak possibly failed!\nPossible error code: " + (CSharp___DllImport.Win32ErrorCode)Registry.LastError);
                         return;
                     }
                 }
@@ -503,6 +503,11 @@ namespace wphTweaks
             {
                 Uri = new Uri("http://windowsphonehacker.com/?utm_source=wph-tweaks&utm_medium=link&utm_campaign=wph-tweaks")
             }.Show();
+        }
+
+        private void CameraAppsButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/CameraApps.xaml", UriKind.Relative));
         }
 
     }
