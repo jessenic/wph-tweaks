@@ -390,12 +390,14 @@ namespace wphTweaks
                         dec.Decode(iso, stream);
                         SplashImage.Source = iso.ToBitmap();
                         SplashImage.Visibility = Visibility.Visible;
-#else
-                        MessageBox.Show("Feature not implemented yet!");
-#endif
                     }
                 });
                 cmb.Show();
+#else
+                        MessageBox.Show("Feature not implemented yet!");
+                }
+#endif
+
 #if !WP8
             }
 #endif
