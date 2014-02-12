@@ -15,6 +15,7 @@ namespace wphTweaks.Tweaks
         {
             Categories.Add(new SystemTweaks());
             Categories.Add(new CustomizationTweaks());
+            //Categories.Add(new CellCoreTweaks()); //These fail, need more caps?
             switch (DeviceStatus.DeviceManufacturer.ToUpper())
             {
                 case "SAMSUNG":

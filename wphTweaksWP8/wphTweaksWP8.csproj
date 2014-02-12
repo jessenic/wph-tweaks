@@ -160,6 +160,7 @@
     <Compile Include="SoundEditor.xaml.cs">
       <DependentUpon>SoundEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tweaks\CellCoreTweaks.cs" />
     <Compile Include="Tweaks\CustomizationTweaks.cs" />
     <Compile Include="Tweaks\NokiaTweaks.cs" />
     <Compile Include="Tweaks\SamsungTweaks.cs" />
