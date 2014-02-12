@@ -86,14 +86,13 @@ namespace wphTweaks.Tweaks
                 RebootNeeded = true
             });
 
-
-            //Not working?
-            //t = new Tweak();
-            //t.Title = "Allow disabling camera shutter sound";
-            //t.OnValue = 0;
-            //t.OffValue = 1;
-            //t.Key = @"HKLM\SOFTWARE\Microsoft\EventSounds\Sounds\Camera\Locked";
-            //Tweaks.Add(t);
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Allow disabling camera shutter sound",
+                OnValue = 1,
+                OffValue = 0,
+                Key = @"HKLM\Software\Microsoft\Photos\OEM\ShutterSoundUnlocked"
+            });
 
         }
 
