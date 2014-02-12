@@ -46,6 +46,16 @@ namespace wphTweaks
                 {
                     Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride", defsplash);
                 }
+                defsplash = Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride_Original");
+                if (defsplash == null || defsplash.Length < 2 || defsplash == "none")
+                {
+                    Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride", "");
+                    Registry.RemoveValue(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride");
+                }
+                else
+                {
+                    Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride", defsplash);
+                }
 #else
                 WP7RootToolsSDK.FileSystem.DeleteFile(@"\windows\mologo.bmp");
 #endif
@@ -71,8 +81,31 @@ namespace wphTweaks
                     }
                     GoogleAnalytics.EasyTracker.GetTracker().SendTiming(DateTime.Now.Subtract(downloadStartTime), "splashchanger", "download_" + id, "Splash " + id + " Download Time");
 
+#if WP8
+                    CustomMessageBox cmb = new CustomMessageBox()
+                    {
+                        IsLeftButtonEnabled = true,
+                        IsRightButtonEnabled = true,
+                        RightButtonContent = "Shutdown",
+                        LeftButtonContent = "Startup",
+                        Message = "Which boot screen you'd like to replace?"
+
+                    };
+                    cmb.Dismissed += new EventHandler<DismissedEventArgs>((dsender, de) =>
+                    {
+                        bool shutdown = false;
+                        if (de.Result == CustomMessageBoxResult.RightButton)
+                        {
+                            shutdown = true;
+                        }
+                        saveImage(e.Result, shutdown);
+                        setBackground(shutdown);
+                    });
+                    cmb.Show();
+#else
                     saveImage(e.Result);
                     setBackground();
+#endif
                 }
             }
             catch (Exception ex)
@@ -83,11 +116,18 @@ namespace wphTweaks
         }
 
 
-        void setBackground()
+        void setBackground(bool shutdown = false)
         {
 #if WP8
             string dir = @"C:\Data\Users\DefApps\AppData\{a85aaecb-e288-4b19-a8e0-fca5d0f2a444}\Local\";
-            Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride", dir + "mologo.bmp");
+            if (shutdown)
+            {
+                Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride", dir + "mologo_shutdown.bmp");
+            }
+            else
+            {
+                Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride", dir + "mologo.bmp");
+            }
 #else
             string dir = @"\Applications\Data\abc1e9fe-b4ab-402c-ab21-11e97e3fde3a\Data\IsolatedStore";
             WP7RootToolsSDK.FileSystem.CopyFile(dir + "\\mologo.bmp", @"\windows\mologo.bmp");
@@ -98,7 +138,17 @@ namespace wphTweaks
         private void PhoneApplicationPage_Loaded_1(object sender, RoutedEventArgs e)
         {
 #if WP8
-            string defsplash = Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride_Original");
+            string defsplash = Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride_Original");
+            if (defsplash == null || defsplash.Length < 2)
+            {
+                defsplash = Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride");
+                if (defsplash.Length < 2)
+                {
+                    defsplash = "none";
+                }
+                Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride_Original", defsplash);
+            }
+            defsplash = Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride_Original");
             if (defsplash == null || defsplash.Length < 2)
             {
                 defsplash = Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride");
@@ -214,8 +264,34 @@ namespace wphTweaks
             {
                 try
                 {
+#if WP8
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        CustomMessageBox cmb = new CustomMessageBox()
+                        {
+                            IsLeftButtonEnabled = true,
+                            IsRightButtonEnabled = true,
+                            RightButtonContent = "Shutdown",
+                            LeftButtonContent = "Startup",
+                            Message = "Which boot screen you'd like to replace?"
+
+                        };
+                        cmb.Dismissed += new EventHandler<DismissedEventArgs>((dsender, de) =>
+                        {
+                            bool shutdown = false;
+                            if (de.Result == CustomMessageBoxResult.RightButton)
+                            {
+                                shutdown = true;
+                            }
+                            saveImage(e.ChosenPhoto, shutdown);
+                            setBackground(shutdown);
+                        });
+                        cmb.Show();
+                    });
+#else
                     saveImage(e.ChosenPhoto);
                     setBackground();
+#endif
                 }
                 catch (Exception ex)
                 {
@@ -225,11 +301,16 @@ namespace wphTweaks
             }
         }
 
-        private void saveImage(Stream image)
+        private void saveImage(Stream image, bool shutdown = false)
         {
             using (var store = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication())
             {
-                using (var stream = store.OpenFile("mologo.bmp", System.IO.FileMode.Create))
+                string filename = "mologo.bmp";
+                if (shutdown)
+                {
+                    filename = "mologo_shutdown.bmp";
+                }
+                using (var stream = store.OpenFile(filename, System.IO.FileMode.Create))
                 {
                     var img = new Image();
                     img.Width = ResolutionSize.Width;
@@ -271,8 +352,25 @@ namespace wphTweaks
             try
             {
 #if WP8
-                using (var stream = System.IO.File.OpenRead(Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride")))
+                CustomMessageBox cmb = new CustomMessageBox()
                 {
+                    IsLeftButtonEnabled = true,
+                    IsRightButtonEnabled = true,
+                    RightButtonContent = "Shutdown",
+                    LeftButtonContent = "Startup",
+                    Message = "Which boot screen you'd like to view?"
+
+                };
+                cmb.Dismissed += new EventHandler<DismissedEventArgs>((dsender, de) =>
+                {
+                    string screen = "Boot";
+                    if (de.Result == CustomMessageBoxResult.RightButton)
+                    {
+                        screen = "Shutdown";
+                    }
+
+                    using (var stream = System.IO.File.OpenRead(Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WP" + screen + "ScreenOverride")))
+                    {
 #else
 
                 using (var store = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication())
@@ -287,15 +385,17 @@ namespace wphTweaks
                     {
 #endif
 #if WP8
-                    var iso = new ExtendedImage();
-                    var dec = new ImageTools.IO.Bmp.BmpDecoder();
-                    dec.Decode(iso, stream);
-                    SplashImage.Source = iso.ToBitmap();
-                    SplashImage.Visibility = Visibility.Visible;
+                        var iso = new ExtendedImage();
+                        var dec = new ImageTools.IO.Bmp.BmpDecoder();
+                        dec.Decode(iso, stream);
+                        SplashImage.Source = iso.ToBitmap();
+                        SplashImage.Visibility = Visibility.Visible;
 #else
                         MessageBox.Show("Feature not implemented yet!");
 #endif
-                }
+                    }
+                });
+                cmb.Show();
 #if !WP8
             }
 #endif
