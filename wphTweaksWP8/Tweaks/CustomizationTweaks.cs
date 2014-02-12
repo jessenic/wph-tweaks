@@ -122,6 +122,22 @@ namespace wphTweaks.Tweaks
                 OffValue = 0,
                 Key = @"HKLM\Software\Microsoft\UIX\ProductFeatures\WiFiToWLAN"
             });
+
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "OEM Watermark in maps",
+                OnValue = 1,
+                OffValue = 0,
+                Key = @"HKLM\SYSTEM\Maps\OEMWatermarkEnabled"
+            });
+
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "China variant of Maps",
+                OnValue = 1,
+                OffValue = 0,
+                Key = @"HKLM\SYSTEM\Maps\OEMChinaVariant"
+            });
         }
     }
 }
