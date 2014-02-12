@@ -178,7 +178,13 @@ namespace wphTweaks
             {
                 tb.Text = (newVal).ToString();
                 SliderTweak tweak = (SliderTweak)sl.Tag;
-                Registry.CreateKey(tweak.Hive, tweak.KeyName);
+                try
+                {
+                    Registry.CreateKey(tweak.Hive, tweak.KeyName);
+                }
+                catch
+                {
+                }
 
                 Registry.WriteDWORD(tweak.Hive, tweak.KeyName, tweak.ValueName, newVal);
                 uint newval = Registry.ReadDWORD(tweak.Hive, tweak.KeyName, tweak.ValueName);
@@ -311,6 +317,13 @@ namespace wphTweaks
                 ListPicker ctrl = (ListPicker)sender;
                 SelectorTweak tweak = (SelectorTweak)ctrl.Tag;
                 GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tweaks", "selected", tweak.Title, ctrl.SelectedIndex);
+                try
+                {
+                    Registry.CreateKey(tweak.Hive, tweak.KeyName);
+                }
+                catch
+                {
+                }
                 if (tweak.KeyType == TweakType.String)
                 {
                     string val = (string)((SelectorTweakItem)ctrl.SelectedItem).Value;
@@ -328,13 +341,6 @@ namespace wphTweaks
                 }
                 else
                 {
-                    try
-                    {
-                        Registry.CreateKey(tweak.Hive, tweak.KeyName);
-                    }
-                    catch
-                    {
-                    }
                     int val = (int)((SelectorTweakItem)ctrl.SelectedItem).Value;
                     Registry.WriteDWORD(tweak.Hive, tweak.KeyName, tweak.ValueName, (uint)val);
                     uint newval = Registry.ReadDWORD(tweak.Hive, tweak.KeyName, tweak.ValueName);
@@ -357,16 +363,15 @@ namespace wphTweaks
                 ToggleSwitch ctrl = (ToggleSwitch)sender;
                 ToggleTweak tweak = (ToggleTweak)ctrl.Tag;
                 GoogleAnalytics.EasyTracker.GetTracker().SendEvent("tweaks", "checked", tweak.Title, ctrl.IsChecked.Value ? 1 : 0);
-
+                try
+                {
+                    Registry.CreateKey(tweak.Hive, tweak.KeyName);
+                }
+                catch
+                {
+                }
                 if (tweak.KeyType == TweakType.DWORD)
                 {
-                    try
-                    {
-                        Registry.CreateKey(tweak.Hive, tweak.KeyName);
-                    }
-                    catch
-                    {
-                    }
                     int val = (int)(ctrl.IsChecked.Value ? tweak.OnValue : tweak.OffValue);
                     Registry.WriteDWORD(tweak.Hive, tweak.KeyName, tweak.ValueName, (uint)val);
                     uint newval = Registry.ReadDWORD(tweak.Hive, tweak.KeyName, tweak.ValueName);
