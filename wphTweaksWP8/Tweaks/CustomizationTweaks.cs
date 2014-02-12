@@ -114,6 +114,14 @@ namespace wphTweaks.Tweaks
                 Key = @"HKLM\SYSTEM\Keyboard\EnableStartOnIdle",
                 RebootNeeded = true
             });
+
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "WLAN instead of WiFi string",
+                OnValue = 1,
+                OffValue = 0,
+                Key = @"HKLM\Software\Microsoft\UIX\ProductFeatures\WiFiToWLAN"
+            });
         }
     }
 }

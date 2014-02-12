@@ -93,7 +93,6 @@ namespace wphTweaks.Tweaks
                 OffValue = 0,
                 Key = @"HKLM\Software\Microsoft\Photos\OEM\ShutterSoundUnlocked"
             });
-
         }
 
     }
