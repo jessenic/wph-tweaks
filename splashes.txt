@@ -2,6 +2,10 @@ Snapdragon|720x1280|http://jessenic.github.io/wph-tweaks/splashes/01_thumb.png|h
 Snapdragon|768x1280|http://jessenic.github.io/wph-tweaks/splashes/01_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/01_768x1280.png|
 Snapdragon|1080x1920|http://jessenic.github.io/wph-tweaks/splashes/01_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/01_1080x1920.png|
 Snapdragon|480x800|http://jessenic.github.io/wph-tweaks/splashes/01_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/01_480x800.png|
+Snapdragon2|720x1280|http://jessenic.github.io/wph-tweaks/splashes/02_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/02_720x1280.png|
+Snapdragon2|768x1280|http://jessenic.github.io/wph-tweaks/splashes/02_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/02_768x1280.png|
+Snapdragon2|1080x1920|http://jessenic.github.io/wph-tweaks/splashes/02_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/02_1080x1920.png|
+Snapdragon2|480x800|http://jessenic.github.io/wph-tweaks/splashes/02_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/02_480x800.png|
 AlvinPhilemon_ATIVS|720x1280|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs.bmp|
 AlvinPhilemon_ATIVS1|720x1280|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs1_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs1.bmp|
 AlvinPhilemon_ATIVS_Light|720x1280|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs_light_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs_light.bmp|
