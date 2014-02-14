@@ -5,7 +5,7 @@ Snapdragon|480x800|http://jessenic.github.io/wph-tweaks/splashes/01_thumb.png|ht
 AlvinPhilemon_ATIVS|720x1280|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs.bmp|
 AlvinPhilemon_ATIVS1|720x1280|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs1_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs1.bmp|
 AlvinPhilemon_ATIVS_Light|720x1280|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs_light_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs_light.bmp|
-AlvinPhilemon_ATIVS_Light1|720x1280|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs_light1_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs_light1.bmp|
+AlvinPhilemon_ATIVS_Light1|720x1280|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs1_light_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/alvin_ativs1_light.bmp|
 7Plain|480x800|http://windowsphonehacker.com/splashes/thumbs/7Plain.png|http://windowsphonehacker.com/splashes/bmp/7Plain.bmp|
 windows8|480x800|http://windowsphonehacker.com/splashes/thumbs/windows8.jpg|http://windowsphonehacker.com/splashes/bmp/windows8.bmp|
 wph2|480x800|http://windowsphonehacker.com/splashes/thumbs/wph2.jpg|http://windowsphonehacker.com/splashes/bmp/wph2.bmp|
