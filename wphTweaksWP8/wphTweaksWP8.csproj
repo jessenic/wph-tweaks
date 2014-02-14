@@ -61,29 +61,29 @@
     <Reference Include="GoogleAnalytics">
       <HintPath>..\packages\GoogleAnalyticsSDK.1.1.01\lib\windowsphone8\GoogleAnalytics.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZLib.Phone, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ImageTools_JpegWP7.1.0.7\lib\sl3-wp\ICSharpCode.SharpZLib.Phone.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZLib.Phone">
+      <HintPath>..\packages\ImageTools.0.3.1\lib\sl3-wp\ICSharpCode.SharpZLib.Phone.dll</HintPath>
     </Reference>
-    <Reference Include="ImageTools, Version=1.5.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ImageTools_JpegWP7.1.0.7\lib\sl3-wp\ImageTools.dll</HintPath>
+    <Reference Include="ImageTools">
+      <HintPath>..\packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.dll</HintPath>
     </Reference>
-    <Reference Include="ImageTools.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ImageTools_JpegWP7.1.0.7\lib\sl3-wp\ImageTools.Controls.dll</HintPath>
+    <Reference Include="ImageTools.Controls">
+      <HintPath>..\packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="ImageTools.Filtering, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ImageTools_JpegWP7.1.0.7\lib\sl3-wp\ImageTools.Filtering.dll</HintPath>
+    <Reference Include="ImageTools.Filtering">
+      <HintPath>..\packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.Filtering.dll</HintPath>
     </Reference>
-    <Reference Include="ImageTools.IO.Bmp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ImageTools_JpegWP7.1.0.7\lib\sl3-wp\ImageTools.IO.Bmp.dll</HintPath>
+    <Reference Include="ImageTools.IO.Bmp">
+      <HintPath>..\packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.IO.Bmp.dll</HintPath>
     </Reference>
-    <Reference Include="ImageTools.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ImageTools_JpegWP7.1.0.7\lib\sl3-wp\ImageTools.Utils.dll</HintPath>
+    <Reference Include="ImageTools.IO.Gif">
+      <HintPath>..\packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.IO.Gif.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Png">
+      <HintPath>..\packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.IO.Png.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.Utils">
+      <HintPath>..\packages\ImageTools.0.3.1\lib\sl3-wp\ImageTools.Utils.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit">
@@ -92,9 +92,8 @@
     <Reference Include="NativeToastLauncher">
       <HintPath>..\Libs\NativeToastLauncher.dll</HintPath>
     </Reference>
-    <Reference Include="PhoneCodeContractsAssemblies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ImageTools_JpegWP7.1.0.7\lib\sl3-wp\PhoneCodeContractsAssemblies.dll</HintPath>
+    <Reference Include="PhoneCodeContractsAssemblies">
+      <HintPath>..\packages\ImageTools.0.3.1\lib\sl3-wp\PhoneCodeContractsAssemblies.dll</HintPath>
     </Reference>
     <Reference Include="Processes">
       <HintPath>..\Libs\Processes.winmd</HintPath>

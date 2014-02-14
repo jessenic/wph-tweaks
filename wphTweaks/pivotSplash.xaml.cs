@@ -67,7 +67,6 @@ namespace wphTweaks
 
         DateTime downloadStartTime;
 
-
         void c_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
         {
             string id = (string)e.UserState;
@@ -164,6 +163,13 @@ namespace wphTweaks
             wc.DownloadStringAsync(new Uri("http://jessenic.github.io/wph-tweaks/splashes.txt"));
         }
 
+        public class ImageListItem
+        {
+            public string Title { get; set; }
+            public ImageSource Thumbnail { get; set; }
+            public Dictionary<string, string> Resolutions = new Dictionary<string, string>(); // resolution, uri
+        }
+
         void wc_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             try
@@ -176,15 +182,27 @@ namespace wphTweaks
                 {
                     //Format: id|resolution|thumb|image|
                     string[] vars = line.Split('|');
-                    ImageList.Items.Add(new TextBlock() { Text = vars[0] + " " + vars[1] });
-                    var img = new Image();
-                    img.Tap += img_Tap;
-                    var bmi = new BitmapImage(new Uri(vars[2]));
-                    img.Tag = vars[3];
-                    img.Name = "image_" + vars[0];
-                    img.Source = bmi;
-
-                    ImageList.Items.Add(img);
+                    ImageListItem ili = null;
+                    foreach (var img in ImageList.Items)
+                    {
+                        if (((ImageListItem)img).Title.ToLower().Equals(vars[0].ToLower()))
+                        {
+                            ili = ((ImageListItem)img);
+                            break;
+                        }
+                    }
+                    if (ili == null)
+                    {
+                        ili = new ImageListItem();
+                        ili.Title = vars[0].Trim();
+                        ili.Thumbnail = new BitmapImage(new Uri(vars[2]));
+                        ili.Resolutions.Add(vars[1], vars[3]);
+                        ImageList.Items.Add(ili);
+                    }
+                    else
+                    {
+                        ili.Resolutions.Add(vars[1], vars[3]);
+                    }
                 }
             }
             catch (Exception ex)
@@ -194,17 +212,6 @@ namespace wphTweaks
             }
         }
 
-        void img_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            Image img = (Image)sender;
-            downloadStartTime = DateTime.Now;
-            WebClient c = new WebClient();
-            c.OpenReadAsync(new Uri((string)img.Tag, UriKind.Absolute), img.Name);
-            c.OpenReadCompleted += c_OpenReadCompleted;
-
-            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("splashchanger", "click_" + img.Name, "Download image " + img.Name, 0);
-            MessageBox.Show("Downloading. This may take a bit.");
-        }
         private Size _resolutionSize;
         public Size ResolutionSize
         {
@@ -412,6 +419,49 @@ namespace wphTweaks
         private void SplashImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             SplashImage.Visibility = Visibility.Collapsed;
+        }
+
+        private void ImageList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ImageList.SelectedItem == null)
+                return;
+            var ili = ImageList.SelectedItem as ImageListItem;
+            ImageList.SelectedItem = null;
+            var uri = ili.Resolutions.First().Value;
+            if (!ili.Resolutions.Keys.Contains(Resolution))
+            {
+                if (ili.Resolutions.Keys.Count > 1)
+                {
+                    bool goodfound = false;
+                    foreach (var reso in ili.Resolutions)
+                    {
+                        if (MessageBox.Show("This splash screen is not in your phone's native resolution.\nWould you like to use " + reso.Key + " instead?\nPress Cancel for other options: " + String.Join(", ", ili.Resolutions.Keys), "Warning!", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                        {
+                            goodfound = true;
+                            uri = reso.Value;
+                            break;
+                        }
+                    }
+                    if (!goodfound)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    if (MessageBox.Show("This splash screen is not in your phone's native resolution. " + ili.Resolutions.First().Key + " will be used instead, but it may not fill the whole screen!", "Warning!", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+                    {
+                        return;
+                    }
+                }
+            }
+            downloadStartTime = DateTime.Now;
+            WebClient c = new WebClient();
+            c.OpenReadAsync(new Uri(uri, UriKind.Absolute), ili.Title);
+            c.OpenReadCompleted += c_OpenReadCompleted;
+
+            GoogleAnalytics.EasyTracker.GetTracker().SendEvent("splashchanger", "click_" + ili.Title, "Download image " + ili.Title, 0);
+            MessageBox.Show("Downloading. This may take a bit.");
         }
     }
 }
