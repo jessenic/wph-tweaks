@@ -1,6 +1,10 @@
-7Plain|480x840|http://windowsphonehacker.com/splashes/thumbs/7Plain.png|http://windowsphonehacker.com/splashes/bmp/7Plain.bmp|
-windows8|480x840|http://windowsphonehacker.com/splashes/thumbs/windows8.jpg|http://windowsphonehacker.com/splashes/bmp/windows8.bmp|
-wph2|480x840|http://windowsphonehacker.com/splashes/thumbs/wph2.jpg|http://windowsphonehacker.com/splashes/bmp/wph2.bmp|
-WPHBlur|480x840|http://windowsphonehacker.com/splashes/thumbs/WPHBlur.png|http://windowsphonehacker.com/splashes/bmp/WPHBlur.bmp|
-wphboot|480x840|http://windowsphonehacker.com/splashes/thumbs/wphboot.jpg|http://windowsphonehacker.com/splashes/bmp/wphboot.bmp|
-android|480x840|http://windowsphonehacker.com/splashes/thumbs/android.jpg|http://windowsphonehacker.com/splashes/bmp/android.bmp|
+Snapdragon|720x1280|http://jessenic.github.io/wph-tweaks/splashes/01_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/01_720x1280.png|
+Snapdragon|768x1280|http://jessenic.github.io/wph-tweaks/splashes/01_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/01_768x1280.png|
+Snapdragon|1080x1920|http://jessenic.github.io/wph-tweaks/splashes/01_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/01_1080x1920.png|
+Snapdragon|480x800|http://jessenic.github.io/wph-tweaks/splashes/01_thumb.png|http://jessenic.github.io/wph-tweaks/splashes/01_480x800.png|
+7Plain|480x800|http://windowsphonehacker.com/splashes/thumbs/7Plain.png|http://windowsphonehacker.com/splashes/bmp/7Plain.bmp|
+windows8|480x800|http://windowsphonehacker.com/splashes/thumbs/windows8.jpg|http://windowsphonehacker.com/splashes/bmp/windows8.bmp|
+wph2|480x800|http://windowsphonehacker.com/splashes/thumbs/wph2.jpg|http://windowsphonehacker.com/splashes/bmp/wph2.bmp|
+WPHBlur|480x800|http://windowsphonehacker.com/splashes/thumbs/WPHBlur.png|http://windowsphonehacker.com/splashes/bmp/WPHBlur.bmp|
+wphboot|480x800|http://windowsphonehacker.com/splashes/thumbs/wphboot.jpg|http://windowsphonehacker.com/splashes/bmp/wphboot.bmp|
+android|480x800|http://windowsphonehacker.com/splashes/thumbs/android.jpg|http://windowsphonehacker.com/splashes/bmp/android.bmp|
