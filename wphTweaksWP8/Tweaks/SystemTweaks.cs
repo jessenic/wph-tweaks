@@ -23,9 +23,20 @@ namespace wphTweaks.Tweaks
             Tweaks.Add(new ToggleTweak()
             {
                 Title = "Smaller text in system apps",
-                RequiredOSVersion = Versions.GDR3,
+                MinOSVersion = Versions.GDR3,
+                MaxOSVersion = Versions.WP81,
                 Key = @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Control Panel\Theme\LargeScreen",
                 RebootNeeded = true
+            });
+
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "5 quick toggles in Action Center",
+                MinOSVersion = Versions.WP81,
+                Key = @"HKLM\SOFTWARE\Microsoft\Settings\QuickSettingElements\Pinned\AllowedQuickSettingsElements",
+                RebootNeeded = true,
+                OnValue = 5,
+                OffValue = 4
             });
 
             var startscreensizes = new List<SelectorTweakItem>();
@@ -47,7 +58,7 @@ namespace wphTweaks.Tweaks
             Tweaks.Add(new SelectorTweak()
             {
                 Title = "Start screen size",
-                RequiredOSVersion = Versions.GDR3,
+                MinOSVersion = Versions.GDR3,
                 Key = @"HKLM\Software\Microsoft\Shell\OEM\Start\ScreenSize",
                 RebootNeeded = true,
                 Options = startscreensizes
@@ -100,6 +111,20 @@ namespace wphTweaks.Tweaks
                 OnValue = 1,
                 OffValue = 0,
                 Key = @"HKLM\SYSTEM\ControlSet001\services\WiFiConnSvc\Parameters\Config\EnableStaticIP"
+            });
+
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Disable USB Control Panel",
+                MinOSVersion = Versions.WP81,
+                Key = @"HKLM\SOFTWARE\Microsoft\Shell\USB\DisableUSBControlPanel"
+            });
+
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Notify on weak charger",
+                MinOSVersion = Versions.WP81,
+                Key = @"HKLM\SOFTWARE\Microsoft\Shell\USB\NotifyOnWeakCharger"
             });
         }
 

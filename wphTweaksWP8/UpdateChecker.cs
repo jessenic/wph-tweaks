@@ -16,7 +16,7 @@ namespace wphTweaks
         {
             startTime = DateTime.Now;
             WebClient wc = new WebClient();
-            wc.DownloadStringAsync(new Uri("http://ci.dy.fi/job/WPH-Tweaks/api/xml"));
+            wc.DownloadStringAsync(new Uri("http://ci.jles.me/job/WPH-Tweaks/api/xml"));
             wc.DownloadStringCompleted += wc_DownloadStringCompleted;
         }
 
@@ -55,7 +55,7 @@ namespace wphTweaks
             catch (Exception ex)
             {
                 GoogleAnalytics.EasyTracker.GetTracker().SendException("Update check failed: " + ex.Message, false);
-                MessageBox.Show("Update check failed! " + ex.Message);
+                //MessageBox.Show("Update check failed! " + ex.Message);
             }
         }
     }

@@ -12,14 +12,24 @@ namespace wphTweaks
         public static readonly Version WP78 = new Version(7, 10, 8858);
         public static readonly Version GDR2 = new Version(8, 0, 10327);
         public static readonly Version GDR3 = new Version(8, 0, 10492);
+        public static readonly Version WP81 = new Version(8, 10);
 
-        public static bool IsOSVersion(Version version)
+        public static bool IsNewerOrCurrentOS(Version version)
         {
             if (version == null)
             {
                 return true;
             }
             return Environment.OSVersion.Version >= version;
+        }
+
+        public static bool IsOlderOS(Version version)
+        {
+            if (version == null)
+            {
+                return true;
+            }
+            return Environment.OSVersion.Version < version;
         }
 
 

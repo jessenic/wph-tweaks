@@ -31,7 +31,11 @@ namespace wphTweaks
                     addCategory(cat.Title);
                     foreach (Tweak t in cat.Tweaks)
                     {
-                        if (!Versions.IsOSVersion(t.RequiredOSVersion))
+                        if (!Versions.IsNewerOrCurrentOS(t.MinOSVersion))
+                        {
+                            continue;
+                        }
+                        if (!Versions.IsOlderOS(t.MaxOSVersion))
                         {
                             continue;
                         }

@@ -114,18 +114,26 @@ namespace wphTweaks
             }
         }
 
+#if WP8
+        string splashDir = @"C:\Data\Users\Public\WPHTweaks\";
+#endif
+
 
         void setBackground(bool shutdown = false)
         {
 #if WP8
-            string dir = @"C:\Data\Users\DefApps\AppData\{a85aaecb-e288-4b19-a8e0-fca5d0f2a444}\Local\";
+            if (!Directory.Exists(splashDir))
+            {
+                Directory.CreateDirectory(splashDir).Attributes = FileAttributes.Hidden;
+                
+            }
             if (shutdown)
             {
-                Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride", dir + "mologo_shutdown.bmp");
+                Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPShutdownScreenOverride", splashDir + "mologo_shutdown.bmp");
             }
             else
             {
-                Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride", dir + "mologo.bmp");
+                Registry.WriteString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WPBootScreenOverride", splashDir + "mologo.bmp");
             }
 #else
             string dir = @"\Applications\Data\abc1e9fe-b4ab-402c-ab21-11e97e3fde3a\Data\IsolatedStore";
@@ -317,7 +325,11 @@ namespace wphTweaks
                 {
                     filename = "mologo_shutdown.bmp";
                 }
+#if WP8
+                using (var stream = File.Open(splashDir+filename,FileMode.Create))
+#else
                 using (var stream = store.OpenFile(filename, System.IO.FileMode.Create))
+#endif
                 {
                     var img = new Image();
                     img.Width = ResolutionSize.Width;
@@ -375,7 +387,7 @@ namespace wphTweaks
                     {
                         screen = "Shutdown";
                     }
-
+                    try { 
                     using (var stream = System.IO.File.OpenRead(Registry.ReadString(RegistryHive.HKLM, @"SYSTEM\Shell\BootScreens", "WP" + screen + "ScreenOverride")))
                     {
 #else
@@ -397,6 +409,11 @@ namespace wphTweaks
                         dec.Decode(iso, stream);
                         SplashImage.Source = iso.ToBitmap();
                         SplashImage.Visibility = Visibility.Visible;
+                    }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Failed", MessageBoxButton.OK);
                     }
                 });
                 cmb.Show();

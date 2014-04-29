@@ -18,7 +18,8 @@ namespace wphTweaks.Tweaks
                 DefaultValue = 8,
                 Key = @"HKLM\Software\Microsoft\Pim\RecentList\8\MaxSize",
                 MinValue = 0,
-                MaxValue = 50
+                MaxValue = 50,
+                MaxOSVersion = Versions.WP81
             });
 
             var lockTimes = new List<SelectorTweakItem>();

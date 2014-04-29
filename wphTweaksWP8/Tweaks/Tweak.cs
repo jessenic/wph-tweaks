@@ -45,7 +45,8 @@ namespace wphTweaks
 
         public bool RebootNeeded;
 
-        public Version RequiredOSVersion;
+        public Version MinOSVersion;
+        public Version MaxOSVersion;
 
         public RegistryHive Hive
         {
