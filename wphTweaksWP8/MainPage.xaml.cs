@@ -519,5 +519,10 @@ namespace wphTweaks
             NavigationService.Navigate(new Uri("/CameraApps.xaml", UriKind.Relative));
         }
 
+        private void RegeditButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Regedit/Regedit.xaml", UriKind.Relative));
+        }
+
     }
 }

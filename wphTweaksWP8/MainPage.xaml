@@ -84,6 +84,7 @@
 
                         <!--<Button Content="modify camera apps" Height="72" Width="360" Click="CameraAppsButton_Click" />-->
                         <Button Content="change splash" Height="72" Width="360" Click="Button_Click_1" />
+                        <Button Content="registry editor" Height="72" Width="360" Click="RegeditButton_Click" />
 
                         <Button Content="restart phone" Height="72" x:Name="btnRestart" VerticalAlignment="Top" Width="360" Click="btnRestart_Click" FontFamily="Segoe WP Light" BorderBrush="#FFBE3A3A" Margin="48,0" />
                     </StackPanel>

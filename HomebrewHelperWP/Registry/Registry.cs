@@ -156,8 +156,43 @@ namespace HomebrewHelperWP
                 error = (uint)ex.HResult;
             }
             LastError = error;
+            if (ret == null)
+            {
+                return new string[] { };
+            }
             return ret;
         }
+
+        public static RegistryValueInfo[] GetValues(RegistryHive hive, string path)
+        {
+            ValueInfo[] ret = new ValueInfo[] { };
+            uint error = 0;
+            try
+            {
+                if (!NativeRegistry.GetValues((global::Registry.RegistryHive)hive, path, out ret))
+                {
+                    error = NativeRegistry.GetError();
+                }
+            }
+            catch (Exception ex)
+            {
+                error = (uint)ex.HResult;
+            }
+            LastError = error;
+            if (ret == null)
+            {
+                return new RegistryValueInfo[] { };
+            }
+            RegistryValueInfo[] ret2 = new RegistryValueInfo[ret.Length];
+            for (int i = 0; i < ret.Length; i++)
+            {
+                ret2[i].Length = ret[i].Length;
+                ret2[i].Name = ret[i].Name;
+                ret2[i].Type = (RegistryType)ret[i].Type;
+            }
+            return ret2;
+        }
+
 
         public static void RemoveValue(RegistryHive hive, string path, string value)
         {
@@ -222,5 +257,27 @@ namespace HomebrewHelperWP
         HKU = -2147483645,
         HKPD = -2147483644,
         HKCC = -2147483643,
+    }
+
+    public struct RegistryValueInfo
+    {
+        public uint Length;
+        public string Name;
+        public RegistryType Type;
+    }
+    public enum RegistryType
+    {
+        None = 0,
+        String = 1,
+        VariableString = 2,
+        Binary = 3,
+        Integer = 4,
+        IntegerBigEndian = 5,
+        SymbolicLink = 6,
+        MultiString = 7,
+        ResourceList = 8,
+        HardwareResourceLIst = 9,
+        ResourceRequirement = 10,
+        Long = 11,
     }
 }
