@@ -28,15 +28,30 @@ namespace wphTweaks.Tweaks
                 Key = @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Control Panel\Theme\LargeScreen",
                 RebootNeeded = true
             });
-
-            Tweaks.Add(new ToggleTweak()
+            
+            var screensizes = new List<SelectorTweakItem>();
+            screensizes.Add(new SelectorTweakItem()
             {
-                Title = "5 quick toggles in Action Center",
+                Title = "Small (normal text)",
+                Value = 0
+            });
+            screensizes.Add(new SelectorTweakItem()
+            {
+                Title = "Medium (smaller text)",
+                Value = 63
+            });
+            screensizes.Add(new SelectorTweakItem()
+            {
+                Title = "Big (small text, 5 quick toggles)",
+                Value = 75
+            });
+            Tweaks.Add(new SelectorTweak()
+            {
+                Title = "Screen size",
                 MinOSVersion = Versions.WP81,
-                Key = @"HKLM\SOFTWARE\Microsoft\Settings\QuickSettingElements\Pinned\AllowedQuickSettingsElements",
+                Key = @"HKLM\Software\Microsoft\Windows\CurrentVersion\Control Panel\Theme\UserPreferenceWidth",
                 RebootNeeded = true,
-                OnValue = 5,
-                OffValue = 4
+                Options = screensizes
             });
 
             var startscreensizes = new List<SelectorTweakItem>();
@@ -67,9 +82,13 @@ namespace wphTweaks.Tweaks
             Tweaks.Add(new ToggleTweak()
             {
                 Title = "Save maps to SD card",
-                OnValue = 1,
-                OffValue = 0,
                 Key = @"HKLM\System\Maps\Storage\UseExternalStorage"
+            });
+
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Use 64MB maps cache instead of 128MB",
+                Key = @"HKLM\System\Maps\Storage\UseSmallerCache"
             });
 
             Tweaks.Add(new ToggleTweak()
@@ -115,6 +134,14 @@ namespace wphTweaks.Tweaks
 
             Tweaks.Add(new ToggleTweak()
             {
+                Title = "Enable SIM Contacts in People",
+                OnValue = 1,
+                OffValue = 0,
+                Key = @"HKLM\Software\Microsoft\Contacts\Sim\EnableSIMAddressBookAndExport"
+            });
+
+            Tweaks.Add(new ToggleTweak()
+            {
                 Title = "Disable USB Control Panel",
                 MinOSVersion = Versions.WP81,
                 Key = @"HKLM\SOFTWARE\Microsoft\Shell\USB\DisableUSBControlPanel"
@@ -125,6 +152,24 @@ namespace wphTweaks.Tweaks
                 Title = "Notify on weak charger",
                 MinOSVersion = Versions.WP81,
                 Key = @"HKLM\SOFTWARE\Microsoft\Shell\USB\NotifyOnWeakCharger"
+            });
+
+
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Enable soft Back, Start and Search buttons",
+                MinOSVersion = Versions.WP81,
+                Key = @"HKLM\SOFTWARE\Microsoft\Shell\NavigationBar\SoftwareModeEnabled",
+                RebootNeeded = true
+            });
+
+
+            Tweaks.Add(new ToggleTweak()
+            {
+                Title = "Enable swipe up to hide on soft navbar",
+                MinOSVersion = Versions.WP81,
+                Key = @"HKLM\SOFTWARE\Microsoft\Shell\NavigationBar\IsSwipeUpToHideEnabled",
+                RebootNeeded = true
             });
         }
 
