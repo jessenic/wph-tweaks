@@ -127,7 +127,10 @@ namespace wphTweaks
             // screen to remain active until the application is ready to render.
             RootFrame = new Microsoft.Phone.Controls.TransitionFrame();
             RootFrame.Navigated += CompleteInitializePhoneApplication;
-
+#if WP8
+            // Assign the URI-mapper class to the application frame.
+            RootFrame.UriMapper = new AssociationUriMapper();
+#endif
             // Handle navigation failures
             RootFrame.NavigationFailed += RootFrame_NavigationFailed;
 
